@@ -1105,8 +1105,7 @@ app.registerExtension({
             panel.classList.remove("cb-hidden");
             toggler.style.display = "none";
         });
-        _el("cb-dna-btn").addEventListener("click", () => {
-            // Center toggler over DNA button's current screen position
+        function _collapsePanel() {
             const dr  = _el("cb-dna-btn").getBoundingClientRect();
             const dcx = dr.left + dr.width  / 2;
             const dcy = dr.top  + dr.height / 2;
@@ -1122,6 +1121,14 @@ app.registerExtension({
             toggler.style.bottom = "auto";
             panel.classList.add("cb-hidden");
             toggler.style.display = "";
+        }
+
+        _el("cb-dna-btn").addEventListener("click", _collapsePanel);
+
+        panel.querySelector(".cb-header").addEventListener("click", (e) => {
+            if (panel._dragging) return;
+            if (e.target.closest(".cb-dna-btn")) return;
+            _collapsePanel();
         });
 
         // ── Tab buttons ───────────────────────────────────────────────────────

@@ -576,11 +576,13 @@ const PANEL_CSS = `
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     letter-spacing: -0.01em;
 }
-.cb-close-btn {
-    cursor: pointer; font-size: 20px; color: #9ca3af;
-    border: none; background: transparent; padding: 0; line-height: 1; transition: color 0.15s;
+.cb-dna-btn {
+    cursor: pointer; font-size: 18px; flex-shrink: 0;
+    border: none; background: transparent; padding: 2px 4px; line-height: 1;
+    border-radius: 6px; transition: background 0.15s, transform 0.15s;
 }
-.cb-close-btn:hover { color: #f3f4f6; }
+.cb-dna-btn:hover { background: rgba(255,255,255,0.08); transform: scale(1.12); }
+.cb-dna-btn:active { transform: scale(0.9); }
 
 /* body layout */
 .cb-body { display: flex; flex: 0 0 auto; overflow: visible; }
@@ -857,8 +859,8 @@ textarea { resize: vertical; min-height: 100px; font-family: inherit; }
 // ── HTML ───────────────────────────────────────────────────────────────────────
 const PANEL_HTML = `
 <div class="cb-header">
-  <span class="cb-header-title">🧬 ComfyBIO Biopython</span>
-  <button class="cb-close-btn" id="cb-close-btn">&times;</button>
+  <button class="cb-dna-btn" id="cb-dna-btn" title="Minimize">🧬</button>
+  <span class="cb-header-title">ComfyBIO Biopython</span>
 </div>
 <div class="cb-body">
 
@@ -1062,19 +1064,22 @@ app.registerExtension({
         document.body.appendChild(toggler);
 
         // ── Drag & Resize setup ───────────────────────────────────────────────
-        _makeDraggable(panel, panel.querySelector(".cb-header"), ".cb-close-btn");
+        _makeDraggable(panel, panel.querySelector(".cb-header"), ".cb-dna-btn");
         _makeResizable(panel);
         _makeDraggable(toggler, toggler);
 
         // ── Panel toggle ──────────────────────────────────────────────────────
         toggler.addEventListener("click", () => {
             if (toggler._dragging) return;
-            // Position panel near toggler
             const tr = toggler.getBoundingClientRect();
             const panelW = panel.offsetWidth || 360;
-            let left = tr.left - panelW - 8;
+            // Default: open to the right of toggler
+            let left = tr.right + 8;
             let top  = tr.top;
-            if (left < 8) left = tr.right + 8;
+            // Fallback: open to the left only when it would go off screen
+            if (left + panelW + 8 > window.innerWidth) {
+                left = tr.left - panelW - 8;
+            }
             left = Math.max(8, Math.min(window.innerWidth  - panelW - 8, left));
             top  = Math.max(8, Math.min(window.innerHeight - 200,        top));
             panel.style.left   = left + "px";
@@ -1084,7 +1089,20 @@ app.registerExtension({
             panel.classList.remove("cb-hidden");
             toggler.style.display = "none";
         });
-        _el("cb-close-btn").addEventListener("click", () => {
+        _el("cb-dna-btn").addEventListener("click", () => {
+            if (panel._dragging) return;
+            // Snap toggler to the panel's current top-right corner
+            const pr = panel.getBoundingClientRect();
+            const tw = toggler.offsetWidth  || 42;
+            const th = toggler.offsetHeight || 42;
+            let tLeft = Math.round(pr.left + pr.width - tw);
+            let tTop  = Math.round(pr.top);
+            tLeft = Math.max(0, Math.min(window.innerWidth  - tw, tLeft));
+            tTop  = Math.max(0, Math.min(window.innerHeight - th, tTop));
+            toggler.style.left   = tLeft + "px";
+            toggler.style.top    = tTop  + "px";
+            toggler.style.right  = "auto";
+            toggler.style.bottom = "auto";
             panel.classList.add("cb-hidden");
             toggler.style.display = "";
         });

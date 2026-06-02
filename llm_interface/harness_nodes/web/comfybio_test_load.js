@@ -1132,14 +1132,11 @@ app.registerExtension({
             panel.classList.remove("cb-hidden");
             toggler.style.display = "none";
         });
-        function _collapsePanel() {
-            const dr  = _el("cb-dna-btn").getBoundingClientRect();
-            const dcx = dr.left + dr.width  / 2;
-            const dcy = dr.top  + dr.height / 2;
+        function _collapsePanel(cx, cy) {
             const tw  = toggler.offsetWidth  || 42;
             const th  = toggler.offsetHeight || 42;
-            let tLeft = Math.round(dcx - tw / 2);
-            let tTop  = Math.round(dcy - th / 2);
+            let tLeft = Math.round(cx - tw / 2);
+            let tTop  = Math.round(cy - th / 2);
             tLeft = Math.max(0, Math.min(window.innerWidth  - tw, tLeft));
             tTop  = Math.max(0, Math.min(window.innerHeight - th, tTop));
             toggler.style.left   = tLeft + "px";
@@ -1150,12 +1147,12 @@ app.registerExtension({
             toggler.style.display = "";
         }
 
-        _el("cb-dna-btn").addEventListener("click", _collapsePanel);
+        _el("cb-dna-btn").addEventListener("click", (e) => _collapsePanel(e.clientX, e.clientY));
 
         panel.querySelector(".cb-header").addEventListener("click", (e) => {
             if (panel._dragging) return;
             if (e.target.closest(".cb-dna-btn")) return;
-            _collapsePanel();
+            _collapsePanel(e.clientX, e.clientY);
         });
 
         // ── Tab buttons ───────────────────────────────────────────────────────

@@ -990,6 +990,8 @@ function _makeDraggable(el, handle, skipSelector) {
             document.body.style.userSelect = "";
             document.removeEventListener("mousemove", onMove);
             document.removeEventListener("mouseup",   onUp);
+            // Reset after click event fires so same-element click suppression still works
+            setTimeout(() => { el._dragging = false; }, 0);
         };
 
         document.addEventListener("mousemove", onMove);
@@ -1104,7 +1106,6 @@ app.registerExtension({
             toggler.style.display = "none";
         });
         _el("cb-dna-btn").addEventListener("click", () => {
-            if (panel._dragging) return;
             // Center toggler over DNA button's current screen position
             const dr  = _el("cb-dna-btn").getBoundingClientRect();
             const dcx = dr.left + dr.width  / 2;

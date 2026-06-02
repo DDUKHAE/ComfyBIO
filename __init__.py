@@ -1,9 +1,8 @@
 """
 ComfyBIO Biopython — root package entry point for ComfyUI.
 
-Dynamically loads all node classes from py/*.py and the LLM workflow
-generator from llm_interface/harness_nodes/, then exposes them via
-a single ComfyExtension.
+Dynamically loads all node classes from py/*.py and registers API routes
+from llm_interface/harness_nodes/, then exposes them via a single ComfyExtension.
 """
 from __future__ import annotations
 import importlib.util

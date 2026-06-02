@@ -726,12 +726,15 @@ textarea { resize: vertical; min-height: 100px; font-family: inherit; }
 #cb-toggler:active { cursor: grabbing; transform: scale(1.0); }
 
 /* resize handles */
-.cb-resize-handle {
-    position: absolute; z-index: 20;
-}
-.cb-resize-e  { top: 0; right: 0; bottom: 0; width: 6px; cursor: ew-resize; }
-.cb-resize-s  { left: 0; right: 0; bottom: 0; height: 6px; cursor: ns-resize; }
-.cb-resize-se { right: 0; bottom: 0; width: 14px; height: 14px; cursor: nwse-resize; }
+.cb-resize-handle { position: absolute; z-index: 20; }
+.cb-resize-n  { top: 0;    left: 12px; right: 12px; height: 6px; cursor: ns-resize; }
+.cb-resize-s  { bottom: 0; left: 12px; right: 12px; height: 6px; cursor: ns-resize; }
+.cb-resize-e  { top: 12px; right: 0; bottom: 12px; width: 6px;  cursor: ew-resize; }
+.cb-resize-w  { top: 12px; left: 0;  bottom: 12px; width: 6px;  cursor: ew-resize; }
+.cb-resize-nw { top: 0; left: 0;   width: 14px; height: 14px; cursor: nwse-resize; z-index: 21; }
+.cb-resize-ne { top: 0; right: 0;  width: 14px; height: 14px; cursor: nesw-resize; z-index: 21; }
+.cb-resize-se { bottom: 0; right: 0; width: 14px; height: 14px; cursor: nwse-resize; z-index: 21; }
+.cb-resize-sw { bottom: 0; left: 0;  width: 14px; height: 14px; cursor: nesw-resize; z-index: 21; }
 
 /* ── Simple I/O File Browser Redesign ── */
 .cb-io-target-selector {
@@ -1001,9 +1004,14 @@ function _makeDraggable(el, handle, skipSelector) {
 
 function _makeResizable(el) {
     const handles = [
-        { cls: "cb-resize-e",  dirs: ["e"] },
-        { cls: "cb-resize-s",  dirs: ["s"] },
-        { cls: "cb-resize-se", dirs: ["e", "s"] },
+        { cls: "cb-resize-n",  dirs: ["n"]      },
+        { cls: "cb-resize-ne", dirs: ["n", "e"] },
+        { cls: "cb-resize-e",  dirs: ["e"]      },
+        { cls: "cb-resize-se", dirs: ["s", "e"] },
+        { cls: "cb-resize-s",  dirs: ["s"]      },
+        { cls: "cb-resize-sw", dirs: ["s", "w"] },
+        { cls: "cb-resize-w",  dirs: ["w"]      },
+        { cls: "cb-resize-nw", dirs: ["n", "w"] },
     ];
 
     handles.forEach(({ cls, dirs }) => {
@@ -1016,19 +1024,38 @@ function _makeResizable(el) {
             e.preventDefault();
             e.stopPropagation();
 
-            const startX = e.clientX;
-            const startY = e.clientY;
-            const startW = el.offsetWidth;
-            const startH = el.offsetHeight;
+            const startX    = e.clientX;
+            const startY    = e.clientY;
+            const startW    = el.offsetWidth;
+            const startH    = el.offsetHeight;
+            const rect      = el.getBoundingClientRect();
+            const startLeft = rect.left;
+            const startTop  = rect.top;
 
             const onMove = (e) => {
                 document.body.style.userSelect = "none";
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
                 if (dirs.includes("e")) {
-                    el.style.width = Math.max(280, startW + (e.clientX - startX)) + "px";
+                    el.style.width = Math.max(280, startW + dx) + "px";
+                }
+                if (dirs.includes("w")) {
+                    const newW = Math.max(280, startW - dx);
+                    el.style.width = newW + "px";
+                    el.style.left  = (startLeft + startW - newW) + "px";
+                    el.style.right = "auto";
                 }
                 if (dirs.includes("s")) {
                     el.style.maxHeight = "none";
-                    el.style.height    = Math.max(200, startH + (e.clientY - startY)) + "px";
+                    el.style.height    = Math.max(200, startH + dy) + "px";
+                }
+                if (dirs.includes("n")) {
+                    const newH = Math.max(200, startH - dy);
+                    el.style.maxHeight = "none";
+                    el.style.height    = newH + "px";
+                    el.style.top       = (startTop + startH - newH) + "px";
+                    el.style.bottom    = "auto";
                 }
             };
 

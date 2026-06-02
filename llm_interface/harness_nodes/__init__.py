@@ -1,6 +1,3 @@
-NODE_CLASS_MAPPINGS = {}
-NODE_DISPLAY_NAME_MAPPINGS = {}
-
 WEB_DIRECTORY = "./web"
 
 # ── Utility API routes for the ComfyBIO panel UI ──────────────────────────────

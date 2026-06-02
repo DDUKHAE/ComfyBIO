@@ -1071,32 +1071,48 @@ app.registerExtension({
         // ── Panel toggle ──────────────────────────────────────────────────────
         toggler.addEventListener("click", () => {
             if (toggler._dragging) return;
-            const tr = toggler.getBoundingClientRect();
+            const tr  = toggler.getBoundingClientRect();
+            const tcx = tr.left + tr.width  / 2;   // toggler center X
+            const tcy = tr.top  + tr.height / 2;   // toggler center Y
             const panelW = panel.offsetWidth || 360;
-            // Default: open to the right of toggler
-            let left = tr.right + 8;
-            let top  = tr.top;
-            // Fallback: open to the left only when it would go off screen
-            if (left + panelW + 8 > window.innerWidth) {
-                left = tr.left - panelW - 8;
-            }
+
+            // Measure DNA button's offset relative to panel while panel is still in DOM.
+            // Temporarily unhide (off-screen) to get accurate layout values.
+            panel.style.visibility = "hidden";
+            panel.style.left = "0px";
+            panel.style.top  = "0px";
+            panel.style.right = "auto";
+            panel.classList.remove("cb-hidden");
+
+            const dr  = _el("cb-dna-btn").getBoundingClientRect();
+            const pr  = panel.getBoundingClientRect();
+            const dnaRelX = dr.left - pr.left + dr.width  / 2;  // DNA center X from panel left
+            const dnaRelY = dr.top  - pr.top  + dr.height / 2;  // DNA center Y from panel top
+
+            panel.classList.add("cb-hidden");
+            panel.style.visibility = "";
+
+            // Place panel so its DNA center lands on toggler center
+            let left = tcx - dnaRelX;
+            let top  = tcy - dnaRelY;
             left = Math.max(8, Math.min(window.innerWidth  - panelW - 8, left));
             top  = Math.max(8, Math.min(window.innerHeight - 200,        top));
-            panel.style.left   = left + "px";
-            panel.style.top    = top  + "px";
-            panel.style.right  = "auto";
-            panel.style.bottom = "auto";
+
+            panel.style.left = left + "px";
+            panel.style.top  = top  + "px";
             panel.classList.remove("cb-hidden");
             toggler.style.display = "none";
         });
         _el("cb-dna-btn").addEventListener("click", () => {
             if (panel._dragging) return;
-            // Snap toggler to the panel's current top-right corner
-            const pr = panel.getBoundingClientRect();
-            const tw = toggler.offsetWidth  || 42;
-            const th = toggler.offsetHeight || 42;
-            let tLeft = Math.round(pr.left + pr.width - tw);
-            let tTop  = Math.round(pr.top);
+            // Center toggler over DNA button's current screen position
+            const dr  = _el("cb-dna-btn").getBoundingClientRect();
+            const dcx = dr.left + dr.width  / 2;
+            const dcy = dr.top  + dr.height / 2;
+            const tw  = toggler.offsetWidth  || 42;
+            const th  = toggler.offsetHeight || 42;
+            let tLeft = Math.round(dcx - tw / 2);
+            let tTop  = Math.round(dcy - th / 2);
             tLeft = Math.max(0, Math.min(window.innerWidth  - tw, tLeft));
             tTop  = Math.max(0, Math.min(window.innerHeight - th, tTop));
             toggler.style.left   = tLeft + "px";

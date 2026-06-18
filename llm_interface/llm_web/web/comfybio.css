@@ -114,7 +114,7 @@
 /* ── Panel ── */
 #cb-panel {
     position: fixed; top: 60px; right: 20px;
-    width: 360px; max-height: calc(100vh - 80px);
+    width: 380px; max-height: calc(100vh - 80px);
     box-sizing: border-box;
     background: var(--cb-bg);
     border: 1px solid var(--cb-border);

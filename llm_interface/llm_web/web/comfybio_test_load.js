@@ -555,12 +555,19 @@ app.registerExtension({
         makeDraggable(toggler, toggler);
 
         // ── Panel toggle ──────────────────────────────────────────────────────
+        // I/O tab reference dimensions used as default panel size on open
+        const IO_DEFAULT_W = 380;
+        const IO_DEFAULT_H = 460;
+
         toggler.addEventListener("click", () => {
             if (toggler._dragging) return;
             const tr  = toggler.getBoundingClientRect();
             const tcx = tr.left + tr.width  / 2;
             const tcy = tr.top  + tr.height / 2;
-            const panelW = panel.offsetWidth || 360;
+            const panelW = panel.offsetWidth || IO_DEFAULT_W;
+
+            // Set I/O-reference height on first open (cleared on tab switch by auto-resize)
+            if (!panel.style.height) panel.style.height = IO_DEFAULT_H + "px";
 
             panel.style.visibility = "hidden";
             panel.style.left = "0px";
@@ -579,7 +586,7 @@ app.registerExtension({
             let left = tcx - dnaRelX;
             let top  = tcy - dnaRelY;
             left = Math.max(8, Math.min(window.innerWidth  - panelW - 8, left));
-            top  = Math.max(8, Math.min(window.innerHeight - 200,        top));
+            top  = Math.max(8, Math.min(window.innerHeight - IO_DEFAULT_H - 8, top));
 
             panel.style.left = left + "px";
             panel.style.top  = top  + "px";

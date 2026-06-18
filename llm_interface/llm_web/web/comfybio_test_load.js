@@ -439,14 +439,14 @@ async function triggerGeneration() {
 const PANEL_HTML = `
 <div class="cb-header">
   <button class="cb-dna-btn" id="cb-dna-btn" title="Minimize">🧬</button>
-  <span class="cb-header-title">ComfyBIO Biopython</span>
+  <span class="cb-header-title">ComfyBIO</span>
 </div>
 <div class="cb-body">
 
   <div class="cb-tabs">
     <button class="cb-tab-btn active" data-tab="llm"    title="LLM Provider">LLM</button>
     <button class="cb-tab-btn"        data-tab="io"     title="Input / Output">I/O</button>
-    <button class="cb-tab-btn"        data-tab="prompt" title="Prompt">PROMPT</button>
+    <button class="cb-tab-btn"        data-tab="prompt" title="Prompt">RUN</button>
   </div>
 
   <div class="cb-right">
@@ -455,7 +455,7 @@ const PANEL_HTML = `
       <!-- ── LLM tab ── -->
       <div class="cb-tab-pane" data-pane="llm" style="display:flex">
         <div>
-          <label>LLM</label>
+          <label>Provider</label>
           <div class="cb-row">
             <select id="cb-provider" style="flex:1">
               <option value="claude">Claude</option>
@@ -472,52 +472,43 @@ const PANEL_HTML = `
           <select id="cb-model"><option value="">Loading…</option></select>
         </div>
 
-        <!-- LLM status log -->
         <div id="cb-llm-log"></div>
       </div>
 
       <!-- ── I/O tab ── -->
       <div class="cb-tab-pane" data-pane="io" style="display:none">
 
-        <!-- Target Switcher -->
         <div class="cb-io-target-selector">
           <button class="cb-target-btn active cb-io-target" id="cb-io-target-input" data-target="input">Input</button>
           <button class="cb-target-btn cb-io-target" id="cb-io-target-output" data-target="output">Output</button>
         </div>
 
-        <!-- Path Bar & Up button -->
         <div class="cb-io-path-row">
-          <input type="text" id="cb-io-current-path-display" style="flex: 1; font-family: monospace; font-size: 10px;" placeholder="Type a path, then press Enter or Up">
-          <button class="cb-btn cb-btn-secondary" id="cb-browser-up" style="padding: 6px 10px;">Up</button>
+          <input type="text" id="cb-io-current-path-display" style="flex:1;font-family:monospace;font-size:10px" placeholder="Path — Enter to navigate">
+          <button class="cb-btn cb-btn-secondary" id="cb-browser-up">↑ Up</button>
         </div>
 
-        <!-- Browser List -->
         <div id="cb-browser-list" class="cb-browser-list">
-          <div class="cb-ib-loading">Loading files...</div>
+          <div class="cb-ib-loading">Loading…</div>
         </div>
 
-        <!-- Current Selection -->
         <div class="cb-io-selected-summary">
-          <label id="cb-io-selected-label">Selected Input Path</label>
+          <label id="cb-io-selected-label">Selected Input</label>
           <div id="cb-selected-path-val" class="cb-selected-path-val">Not selected</div>
-
-          <!-- Hidden fields for compatibility -->
           <input type="text" id="cb-input-path" style="display:none">
           <input type="text" id="cb-output-path" style="display:none">
-
           <div class="cb-io-error" id="cb-input-error"></div>
           <div class="cb-io-error" id="cb-output-error" style="display:none"></div>
         </div>
 
-        <button class="cb-btn cb-btn-primary" id="cb-browser-select-current" style="width: 100%;">Apply Current Directory</button>
+        <button class="cb-btn cb-btn-primary" id="cb-browser-select-current" style="width:100%">Apply Directory</button>
       </div>
 
       <!-- ── PROMPT tab ── -->
       <div class="cb-tab-pane" data-pane="prompt" style="display:none">
         <textarea id="cb-query"
-          placeholder="e.g. Parse a FASTA file and calculate GC content for each sequence&#10;&#10;Ctrl+Enter to generate"></textarea>
-        <button class="cb-btn cb-btn-generate" id="cb-generate-btn">⚡ Generate Workflow</button>
-        <!-- Execution log -->
+          placeholder="e.g. Parse a FASTA file and calculate GC content&#10;&#10;Ctrl+Enter to run"></textarea>
+        <button class="cb-btn cb-btn-generate" id="cb-generate-btn">▶ Generate Workflow</button>
         <div id="cb-prompt-log" hidden></div>
       </div>
 

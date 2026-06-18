@@ -75,7 +75,10 @@ async function _openXtermLogin(provider) {
     wrap.innerHTML = "";
     wrap.classList.add("cb-xterm-open");
 
-    // Measure available size
+    // Wait one animation frame so the browser lays out #cb-xterm-wrap
+    // before we measure its pixel dimensions.
+    await new Promise(r => requestAnimationFrame(r));
+
     const rect = wrap.getBoundingClientRect();
     const cols  = Math.max(20, Math.floor((rect.width  - 8) / 7.2)) || 44;
     const rows  = Math.max(4,  Math.floor((rect.height - 8) / 14))  || 18;
@@ -93,7 +96,8 @@ async function _openXtermLogin(provider) {
         cursorBlink: true,
         cursorStyle: "block",
         allowProposedApi: true,
-        convertEol: true,
+        // convertEol intentionally omitted: PTY already sends \r\n;
+        // enabling it would double-convert and corrupt line endings.
     });
     _xtermInst.open(wrap);
 
@@ -117,8 +121,12 @@ async function _openXtermLogin(provider) {
     _xtermWs.onerror = () => _xtermInst?.write("\r\n\x1b[31m[오류] 서버 연결 실패\x1b[0m\r\n");
     _xtermWs.onclose = () => _xtermInst?.write("\r\n\x1b[33m[세션 종료]\x1b[0m\r\n");
 
+    // Encode keystrokes as UTF-8 bytes so the backend receives BINARY frames
+    // and writes them directly to the PTY (TEXT frames are reserved for JSON
+    // control messages like resize).
+    const _enc = new TextEncoder();
     _xtermInst.onData((d) => {
-        if (_xtermWs?.readyState === WebSocket.OPEN) _xtermWs.send(d);
+        if (_xtermWs?.readyState === WebSocket.OPEN) _xtermWs.send(_enc.encode(d));
     });
 
     return true;

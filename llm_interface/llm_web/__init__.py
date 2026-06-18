@@ -267,33 +267,36 @@ try:
                 return web.json_response({"status": "error", "message": str(e)})
         return web.json_response({"status": "success", "logs": "[System] Waiting for terminal logs..."})
 
+    def _resolve_binary(names: list[str]) -> str:
+        """Return the first resolvable binary path from a priority list."""
+        import shutil
+        home = os.path.expanduser("~")
+        search_bases = [
+            os.path.join(home, ".local", "bin"),
+            os.path.join(home, ".npm-global", "bin"),
+            "/usr/local/bin",
+            "/opt/homebrew/bin",
+        ]
+        for name in names:
+            found = shutil.which(name)
+            if found:
+                return found
+            for base in search_bases:
+                p = os.path.join(base, name)
+                if os.path.exists(p):
+                    return p
+        return names[-1]  # last name as fallback
+
     def _get_login_terminal_cmd(provider: str) -> list[str]:
         """Return the CLI login command for the given provider, resolving the binary path."""
-        import shutil
-
+        # Gemini CLI was renamed: agy takes priority over the legacy 'gemini' name.
         specs = {
-            "claude": ("claude",  ["auth", "login"]),
-            "codex":  ("codex",   ["login"]),
-            "gemini": ("gemini",  ["auth", "login"]),
+            "claude": (["claude"],         ["auth", "login"]),
+            "codex":  (["codex"],          ["login"]),
+            "gemini": (["agy", "gemini"],  ["auth", "login"]),
         }
-        binary_name, args = specs.get(provider, ("claude", ["auth", "login"]))
-
-        binary = shutil.which(binary_name)
-        if not binary:
-            home = os.path.expanduser("~")
-            for candidate in (
-                os.path.join(home, ".local", "bin", binary_name),
-                os.path.join(home, ".npm-global", "bin", binary_name),
-                f"/usr/local/bin/{binary_name}",
-                f"/opt/homebrew/bin/{binary_name}",
-            ):
-                if os.path.exists(candidate):
-                    binary = candidate
-                    break
-            else:
-                binary = binary_name
-
-        return [binary] + args
+        names, args = specs.get(provider, (["claude"], ["auth", "login"]))
+        return [_resolve_binary(names)] + args
 
     @PromptServer.instance.routes.get("/comfybio/terminal")
     async def api_terminal_ws(request):
@@ -355,11 +358,13 @@ try:
         async def _ws_to_pty():
             async for msg in ws:
                 if msg.type == web.WSMsgType.BINARY:
+                    # Raw keyboard input encoded as UTF-8 bytes by the frontend
                     try:
                         os.write(master_fd, msg.data)
                     except OSError:
                         break
                 elif msg.type == web.WSMsgType.TEXT:
+                    # Either a JSON control message or plain-text keyboard input
                     try:
                         ev = json.loads(msg.data)
                         if ev.get("type") == "resize":
@@ -367,8 +372,13 @@ try:
                             c = max(20, int(ev.get("cols", cols)))
                             fcntl.ioctl(master_fd, termios.TIOCSWINSZ,
                                         struct.pack("HHHH", r, c, 0, 0))
-                    except Exception:
-                        pass
+                        # other control messages ignored
+                    except json.JSONDecodeError:
+                        # Not JSON → treat as terminal keystrokes
+                        try:
+                            os.write(master_fd, msg.data.encode("utf-8"))
+                        except OSError:
+                            break
                 elif msg.type in (web.WSMsgType.ERROR, web.WSMsgType.CLOSE):
                     break
 

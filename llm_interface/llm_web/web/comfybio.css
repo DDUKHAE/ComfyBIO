@@ -1,27 +1,27 @@
-/* ComfyBIO Biopython — Spotify Design System */
+/* ComfyBIO Biopython — Deep Green Theme */
 
 :root {
-    /* ── Spotify Surface Ramps ── */
-    --cb-canvas:    #121212;
-    --cb-surface-1: #1A1A1A;
-    --cb-surface-2: #282828;
-    --cb-surface-3: #333333;
-    --cb-border-sp: #3E3E3E;
+    /* ── Green Surface Ramps (main color = green) ── */
+    --cb-canvas:    #0B1A10;   /* darkest — panel base */
+    --cb-surface-1: #112318;   /* header, tab sidebar */
+    --cb-surface-2: #163020;   /* cards, log areas */
+    --cb-surface-3: #1B3A27;   /* input fields */
+    --cb-border-sp: #27523A;   /* structural dividers */
 
-    /* ── Spotify Green ── */
+    /* ── Bright Green Accent ── */
     --cb-green:       #1DB954;
     --cb-green-hover: #1ED760;
     --cb-on-green:    #000000;
 
-    /* ── Text ── */
+    /* ── Text — primary white, secondary grey ── */
     --cb-text-primary:   #FFFFFF;
     --cb-text-secondary: #A7A7A7;
 
-    /* ── Mapped aliases (used throughout) ── */
+    /* ── Mapped aliases ── */
     --cb-bg:          var(--comfy-menu-bg,   var(--cb-canvas));
-    --cb-accent:      var(--comfy-active-accent, var(--cb-green));
+    --cb-accent:      var(--comfy-active-accent,   var(--cb-green));
     --cb-accent-2:    var(--comfy-active-accent-2, var(--cb-green-hover));
-    --cb-text:        var(--fg-color,  var(--cb-text-primary));
+    --cb-text:        var(--fg-color,   var(--cb-text-primary));
     --cb-text-muted:  var(--desc-color, var(--cb-text-secondary));
     --cb-radius:      8px;
 
@@ -30,55 +30,55 @@
     --cb-input-bg:     var(--comfy-input-bg, var(--cb-surface-3));
     --cb-input-border: var(--border-color,   var(--cb-border-sp));
     --cb-log-bg:       var(--comfy-input-bg, var(--cb-surface-2));
-    --cb-shadow:       0 8px 32px rgba(0, 0, 0, 0.6);
+    --cb-shadow:       0 8px 32px rgba(0, 0, 0, 0.7);
 
     --cb-tab-hover-bg:   var(--cb-surface-2);
     --cb-tab-hover-text: var(--cb-text-primary);
     --cb-tab-text:       var(--desc-color, var(--cb-text-secondary));
 
-    --cb-header-border:  var(--cb-green);
-    --cb-border:         var(--border-color, var(--cb-border-sp));
-    --cb-border-subtle:  var(--border-color, rgba(255, 255, 255, 0.06));
-    --cb-pane-border:    var(--cb-border-sp);
+    --cb-header-border: var(--cb-green);
+    --cb-border:        var(--border-color, var(--cb-border-sp));
+    --cb-border-subtle: var(--border-color, rgba(255, 255, 255, 0.06));
+    --cb-pane-border:   var(--cb-border-sp);
 
     --cb-btn-sec-bg:   var(--cb-surface-3);
     --cb-btn-sec-text: var(--cb-text-primary);
 
-    --cb-target-bg:       var(--cb-surface-2);
+    --cb-target-bg:        var(--cb-surface-2);
     --cb-browser-hover-bg: var(--cb-surface-2);
-    --cb-browser-text:    var(--cb-text-primary);
+    --cb-browser-text:     var(--cb-text-primary);
 
-    --cb-status-ok-bg:     rgba(29, 185, 84, 0.10);
-    --cb-status-ok-border: rgba(29, 185, 84, 0.30);
-    --cb-status-warn-bg:   rgba(245, 158, 11, 0.10);
-    --cb-status-warn-border: rgba(245, 158, 11, 0.30);
-    --cb-status-err-bg:    rgba(239, 68, 68, 0.10);
-    --cb-status-err-border: rgba(239, 68, 68, 0.30);
+    --cb-status-ok-bg:       rgba(29, 185, 84, 0.15);
+    --cb-status-ok-border:   rgba(29, 185, 84, 0.40);
+    --cb-status-warn-bg:     rgba(245, 158, 11, 0.12);
+    --cb-status-warn-border: rgba(245, 158, 11, 0.35);
+    --cb-status-err-bg:      rgba(239, 68, 68, 0.12);
+    --cb-status-err-border:  rgba(239, 68, 68, 0.35);
 
-    --cb-status-ok-text:   #1DB954;
-    --cb-status-warn-text: #f59e0b;
-    --cb-status-err-text:  #ef4444;
+    --cb-status-ok-text:   #1ED760;
+    --cb-status-warn-text: #fbbf24;
+    --cb-status-err-text:  #f87171;
 
     --cb-pl-ts:  var(--cb-text-secondary);
     --cb-pl-msg: var(--cb-text-primary);
 }
 
-/* Light theme — Spotify-inspired inverted */
+/* Light theme — inverted green */
 .cb-theme-light {
-    --cb-canvas:    #FFFFFF;
-    --cb-surface-1: #F6F6F6;
-    --cb-surface-2: #EFEFEF;
-    --cb-surface-3: #E5E5E5;
-    --cb-border-sp: #D9D9D9;
-    --cb-green:       #1DB954;
-    --cb-green-hover: #18a448;
-    --cb-text-primary:   #121212;
-    --cb-text-secondary: #6A6A6A;
+    --cb-canvas:    #F0FFF5;
+    --cb-surface-1: #E6F7EE;
+    --cb-surface-2: #D5EDDF;
+    --cb-surface-3: #C3E3CE;
+    --cb-border-sp: #8FC9A6;
+    --cb-green:       #15803D;
+    --cb-green-hover: #16A34A;
+    --cb-text-primary:   #0A1F0E;
+    --cb-text-secondary: #4B7A5A;
 
     --cb-bg:          var(--comfy-menu-bg,   var(--cb-canvas));
-    --cb-accent:      var(--comfy-active-accent, var(--cb-green));
+    --cb-accent:      var(--comfy-active-accent,   var(--cb-green));
     --cb-accent-2:    var(--comfy-active-accent-2, var(--cb-green-hover));
-    --cb-text:        var(--fg-color,  var(--cb-text-primary));
+    --cb-text:        var(--fg-color,   var(--cb-text-primary));
     --cb-text-muted:  var(--desc-color, var(--cb-text-secondary));
 
     --cb-tabs-bg:      var(--comfy-input-bg, var(--cb-surface-1));
@@ -86,7 +86,7 @@
     --cb-input-bg:     var(--comfy-input-bg, var(--cb-surface-3));
     --cb-input-border: var(--border-color,   var(--cb-border-sp));
     --cb-log-bg:       var(--comfy-input-bg, var(--cb-surface-2));
-    --cb-shadow:       0 8px 24px rgba(0, 0, 0, 0.12);
+    --cb-shadow:       0 8px 24px rgba(0, 30, 10, 0.15);
 
     --cb-tab-hover-bg:   var(--cb-surface-2);
     --cb-tab-hover-text: var(--cb-text-primary);
@@ -103,9 +103,9 @@
     --cb-browser-hover-bg: var(--cb-surface-2);
     --cb-browser-text:     var(--cb-text-primary);
 
-    --cb-status-ok-text:   #1A8A40;
-    --cb-status-warn-text: #B45309;
-    --cb-status-err-text:  #DC2626;
+    --cb-status-ok-text:   #15803D;
+    --cb-status-warn-text: #92400E;
+    --cb-status-err-text:  #991B1B;
 
     --cb-pl-ts:  var(--cb-text-secondary);
     --cb-pl-msg: var(--cb-text-primary);
@@ -209,10 +209,10 @@ select, input[type="text"], textarea {
     outline: none; width: 100%; box-sizing: border-box;
     transition: border-color 0.15s, box-shadow 0.15s;
 }
-select:hover, input[type="text"]:hover { border-color: var(--cb-text-secondary); }
+select:hover, input[type="text"]:hover { border-color: rgba(255, 255, 255, 0.3); }
 select:focus, input[type="text"]:focus, textarea:focus {
     border-color: var(--cb-accent);
-    box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.20);
+    box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.30);
 }
 textarea {
     resize: vertical; min-height: 72px; max-height: 160px;

@@ -26,8 +26,8 @@
 
 ```
 ┌─── QC ────────┐   ┌─── Alignment ─────┐   ┌─── DE Analysis ──┐
-│  Fastp_trim   │──►│  STAR_align        │──►│  DESeq2_run      │
-└───────────────┘   └────────────────────┘   └──────────────────┘
+│  Fastp_trim   │──►│  STAR_align       │──►│  DESeq2_run      │
+└───────────────┘   └───────────────────┘   └──────────────────┘
 ```
 
 Group Box 색상 규칙:
@@ -39,6 +39,11 @@ Group Box 색상 규칙:
 | 정렬/정량 | 파란색 (`#25a`) |
 | 분석 (DE, clustering) | 보라 (`#62a`) |
 | 출력/시각화 | 주황 (`#a62`) |
+
+추가 가독성 규칙:
+- 같은 단계는 항상 같은 Group Box 색을 사용한다.
+- Group Box 제목 텍스트는 배경과 충분한 대비가 나도록 밝은 색으로 유지한다.
+- 장식용 색 추가를 금지하고 단계 의미 전달에만 색을 사용한다.
 
 ### 1-3. Branch 최소화
 
@@ -54,8 +59,9 @@ Group Box 색상 규칙:
 
 ### 1-5. 시작/종료 노드 형태
 
-- **시작 노드**: 입력 포트가 없는 노드(파일 경로 위젯만 있음). 캔버스 가장 왼쪽.
-- **종료 노드**: `OUTPUT_NODE = True`이고, 출력 포트가 없거나 `summary_text`만 있는 노드. 캔버스 가장 오른쪽.
+- **시작 노드**: 연결 입력 소켓은 없고, 파일/메타데이터 위젯만 있는 source node. 캔버스 가장 왼쪽.
+- **종료 노드**: 최종 결과 파일 또는 시각화 아티팩트를 생성하는 노드. 캔버스 가장 오른쪽.
+- **실행 가능성 규칙**: 모든 노드는 `OUTPUT_NODE = True`를 가진다. 이는 단독 실행을 위한 엔진 설정이며, 시각적 종료 노드 여부와는 별개다.
 - 워크플로우 하나에 시작 노드는 1~2개, 종료 노드는 1개를 권장.
 
 ---
@@ -112,14 +118,14 @@ outputs=[
         tooltip="Trimmed R1 FASTQ path"),
     io.Custom("RNASEQ_FASTQ").Output("r2_trimmed",
         tooltip="Trimmed R2 FASTQ path (empty for single-end)"),
-    io.String.Output("summary_text"),      # 텍스트 출력은 STRING 유지
+    io.String.Output("stats_json"),
 ],
 
 # ✅ 사용자가 직접 입력하는 값 → STRING/COMBO 유지
 inputs=[
-    io.String.Input("genome_dir", ...),    # 사용자가 경로 타이핑
-    io.Combo.Input("out_sam_type", ...),   # 사용자가 선택
-    io.Int.Input("threads", ...),          # 사용자가 숫자 입력
+    io.String.Input("genome_dir", ...),
+    io.Combo.Input("out_sam_type", ...),
+    io.Int.Input("threads", ...),
 ],
 
 # ✅ 다른 노드 출력을 받는 포트 → 의미적 타입
@@ -135,9 +141,10 @@ inputs=[
 ### 2-4. STRING 포트 제한 규칙
 
 출력 포트에서 `io.String.Output`을 사용할 수 있는 경우:
-- `summary_text` — 사람이 읽는 분석 요약
 - `stats_json` — 통계 JSON 문자열
 - `annotation_json` — 클러스터 주석 JSON
+- `report_md` — 사람이 읽는 마크다운 리포트
+- `log_final_path` — 실행 로그 파일 경로를 보조 정보로 노출할 때
 
 그 외 **파일 경로나 객체를 전달하는 출력에는 반드시 의미적 타입을 사용**한다.
 
@@ -183,7 +190,7 @@ SC find markers         Find Marker Genes for Each Cluster
 
 ```python
 node_id="Fastp_trim"            display_name="fastp trim"
-node_id="Fastp_trim_Advanced"   display_name="fastp trim +"   # 고급 = 접미어 "+"
+node_id="Fastp_trim_Advanced"   display_name="fastp trim +"
 ```
 
 입력/출력이 다른 변형:
@@ -213,6 +220,10 @@ node_id="DESeq2_run_paired"     display_name="DESeq2 run (paired)"
 ### 4-2. 기본 노드 예시
 
 ```python
+class _Base(io.ComfyNode):
+    OUTPUT_NODE = True
+
+
 class Fastp_trim(_Base):
     """기본 어댑터 트리밍. 고급 옵션은 Fastp_trim_Advanced 사용."""
 
@@ -223,14 +234,12 @@ class Fastp_trim(_Base):
             display_name="fastp trim",
             category="Transcriptomics/QC",
             inputs=[
-                # ── 입력 파일 (필수) ───────────────────────────────
                 io.String.Input("r1_path",
                     display_name="R1 FASTQ", multiline=False, default=""),
                 io.String.Input("r2_path",
                     display_name="R2 FASTQ (optional)", multiline=False, default=""),
                 io.String.Input("output_dir",
                     display_name="Output dir", multiline=False, default=""),
-                # ── 핵심 파라미터 (2~3개) ─────────────────────────
                 io.Int.Input("thread",
                     display_name="Threads", default=4, min=1, max=32),
                 io.Int.Input("quality_phred",
@@ -239,7 +248,6 @@ class Fastp_trim(_Base):
             outputs=[
                 io.Custom("RNASEQ_FASTQ").Output("r1_trimmed"),
                 io.Custom("RNASEQ_FASTQ").Output("r2_trimmed"),
-                io.String.Output("summary_text"),   # 항상 마지막
             ],
         )
 ```
@@ -257,14 +265,12 @@ class Fastp_trim_Advanced(_Base):
             display_name="fastp trim +",
             category="Transcriptomics/QC",
             inputs=[
-                # ── 입력 파일 ──────────────────────────────────────
                 io.String.Input("r1_path", display_name="R1 FASTQ",
                     multiline=False, default=""),
                 io.String.Input("r2_path", display_name="R2 FASTQ (optional)",
                     multiline=False, default=""),
                 io.String.Input("output_dir", display_name="Output dir",
                     multiline=False, default=""),
-                # ── 주요 파라미터 ──────────────────────────────────
                 io.Int.Input("thread", display_name="Threads",
                     default=4, min=1, max=32),
                 io.Int.Input("quality_phred", display_name="Min quality (Phred)",
@@ -277,7 +283,6 @@ class Fastp_trim_Advanced(_Base):
                     multiline=False, default=""),
                 io.String.Input("adapter_sequence_r2", display_name="Adapter R2",
                     multiline=False, default=""),
-                # ── 고급 CLI 옵션 ──────────────────────────────────
                 io.String.Input("extra_args", display_name="Extra fastp args",
                     multiline=True, default="",
                     tooltip="e.g. --cut_front --trim_poly_x"),
@@ -286,7 +291,6 @@ class Fastp_trim_Advanced(_Base):
                 io.Custom("RNASEQ_FASTQ").Output("r1_trimmed"),
                 io.Custom("RNASEQ_FASTQ").Output("r2_trimmed"),
                 io.String.Output("stats_json"),
-                io.String.Output("summary_text"),
             ],
         )
 ```
@@ -302,52 +306,54 @@ class Fastp_trim_Advanced(_Base):
 
 ```
 1. 주 결과 (다음 노드 입력으로 연결되는 것)  ← 최상단, 의미적 타입
-2. 보조 결과 (있어도 되고 없어도 되는 것)   ← 1~2개
-3. summary_text                              ← 항상 마지막, STRING
+2. 보조 결과 (실험적으로 중요한 것)        ← 0~1개 권장
+3. 구조화된 보조 텍스트/JSON              ← 필요 시만 추가
 ```
 
-기본 노드는 **주 결과 1개 + summary_text**만 출력한다.
+기본 노드는 **주 결과 1~2개**, 정말 필요한 경우에만 보조 결과 1개를 추가한다.
+기본 노드 출력은 **최대 3개**를 넘기지 않는다.
 
 ```python
-# 기본 노드 출력 (2개)
+# 기본 노드 출력 (권장: 2개)
 outputs=[
-    io.Custom("RNASEQ_BAM").Output("bam_path"),   # 주 결과
-    io.String.Output("summary_text"),              # 요약
+    io.Custom("RNASEQ_BAM").Output("bam_path"),
+    io.Float.Output("mapping_rate"),
 ]
 
 # 고급 노드 출력 (4개 이하 권장)
 outputs=[
-    io.Custom("RNASEQ_BAM").Output("bam_path"),    # 주 결과
-    io.String.Output("log_final_path"),             # 보조
-    io.Float.Output("mapping_rate"),                # 보조
-    io.String.Output("summary_text"),               # 요약
+    io.Custom("RNASEQ_BAM").Output("bam_path"),
+    io.String.Output("log_final_path"),
+    io.Float.Output("mapping_rate"),
+    io.String.Output("stats_json"),
 ]
 ```
 
-### 5-2. summary_text 형식
+### 5-2. 출력 선택 기준
 
 ```python
-def _star_summary(...) -> str:
-    return "\n".join([
-        "=== STAR Alignment Summary ===",   # 헤더: "=== 도구명 설명 ==="
-        f"Input reads    : {n_in:,}",       # 키: 20자 이내, 값 오른쪽 정렬
-        f"Uniquely mapped: {n_uniq:,} ({pct:.1f}%)",
-        f"Multi-mapped   : {n_multi:,}",
-    ])
+outputs=[
+    io.Custom("RNASEQ_COUNTS").Output("counts_path"),
+    io.Int.Output("n_genes_detected"),
+    io.String.Output("stats_json"),
+]
 ```
 
-### 5-3. 오류 처리 — 절대로 예외를 raise하지 않는다
+- 다음 분석 단계에서 직접 소비하는 결과를 우선 출력한다.
+- 사람이 빠르게 확인해야 하는 핵심 수치만 보조 출력으로 둔다.
+- 긴 설명문 대신 구조화된 파일/수치/JSON을 우선한다.
+
+### 5-3. 오류 처리 — 예외를 즉시 raise한다
 
 ```python
 @classmethod
 def execute(cls, ...) -> io.NodeOutput:
-    try:
-        # 분석 실행
-        ...
-        return io.NodeOutput(result_path, summary)
-    except Exception as e:
-        # 모든 오류를 summary_text로 반환, ComfyUI 워크플로우가 중단되지 않음
-        return io.NodeOutput("", f"ERROR: {e}")
+    from llm_core.domain.module import run_tool
+
+    result_path, mapping_rate = run_tool(...)
+    if not result_path:
+        raise RuntimeError("STAR_align produced no BAM output")
+    return io.NodeOutput(result_path, mapping_rate)
 ```
 
 ---
@@ -361,7 +367,7 @@ import shlex
 
 cmd = ["fastp", "--in1", r1_path, ...]
 if extra_args.strip():
-    cmd += shlex.split(extra_args)   # "–-cut_front –-trim_poly_x" → ["-–cut_front", "–-trim_poly_x"]
+    cmd += shlex.split(extra_args)
 ```
 
 사용자 입력 예:
@@ -377,7 +383,7 @@ import json
 try:
     extra_kwargs = json.loads(extra_args) if extra_args.strip() else {}
 except json.JSONDecodeError as e:
-    return io.NodeOutput("", f"ERROR: extra_args는 JSON 형식이어야 합니다 — {e}")
+    raise ValueError(f"extra_args는 JSON 형식이어야 합니다: {e}")
 
 result = some_python_function(param1=val1, **extra_kwargs)
 ```
@@ -426,7 +432,7 @@ io.Int.Input("quality_phred",
 paired = bool(r2_path and r2_path.strip())
 ```
 
-`single_end: bool` 별도 입력을 추가하지 않는다 — r2_path 유무로 판단한다.
+`single_end: bool` 별도 입력을 추가하지 않는다. `r2_path` 유무로 판단한다.
 
 ### 7-4. output_dir 기본값
 
@@ -476,6 +482,7 @@ llm_interface/llm_core/
 **py/ 파일 규칙:**
 - `comfy_api` 이외 라이브러리는 모듈 레벨이 아닌 `execute()` 내부에서 지연 import한다.
 - 분석 로직은 `llm_core/도메인/*.py`의 독립 함수로 분리한다.
+- 모든 노드의 공통 base class는 `OUTPUT_NODE = True`를 포함해야 한다.
 
 **llm_core/ 함수 규칙:**
 - `from comfy_api.latest import io` 금지 — ComfyUI 없이 단독 실행 가능해야 한다.
@@ -488,10 +495,11 @@ llm_interface/llm_core/
 
 - [ ] `py/` 파일에서 모듈 레벨 `import pandas`, `import scanpy` — **금지** (지연 import로)
 - [ ] `llm_core/` 파일에서 `from comfy_api.latest import io` — **금지**
-- [ ] `execute()`에서 예외 raise — **금지** (summary_text로 오류 반환)
+- [ ] `execute()`에서 오류를 숨기고 빈 결과를 반환 — **금지** (즉시 raise)
 - [ ] output_path 빈 문자열을 경로로 사용 — **금지** (tempfile 생성)
 - [ ] 노드 사이를 흐르는 파일/객체에 `io.String.Output` 사용 — **금지** (의미적 타입 사용)
 - [ ] 기본 노드 입력 포트 7개 초과 — **금지** (고급 노드로 분리)
+- [ ] 기본 노드 출력 포트 4개 이상 — **금지** (최대 3개)
 - [ ] display_name 21자 초과 — **금지** (약어 사용)
 - [ ] `io.Custom("타입명")` 별칭 변수 사용 — **금지** (build_registry AST 파서가 인식 못함)
 - [ ] 출력 포트 5개 초과 — **권장 안 함** (보조 출력 최소화)

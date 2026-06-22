@@ -6,8 +6,8 @@ import asyncio
 import uuid
 
 from llm_core import exec_log, workflow_history
-from llm_core.biopython_comfy_adapter import load_registry
-from llm_core.biopython_prompts import get_biopython_workflow_prompt
+from llm_core.biopython.comfy_adapter import load_registry
+from llm_core.biopython.prompts import get_biopython_workflow_prompt
 from llm_core.llm_adapters import get_adapter
 from llm_core.llm_contracts import LLMContractError, parse_and_validate_llm_output
 from llm_core.workflow_guidance import (

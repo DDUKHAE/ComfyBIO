@@ -1,0 +1,29 @@
+{
+  "protocol_id": "COMFYBIO-BIB-001",
+  "protocol_version": "1.0",
+  "freeze_date": "2026-06-22",
+  "timezone": "Asia/Seoul",
+  "target_journal": "Briefings in Bioinformatics",
+  "status": "task_01_complete_heldout_forbidden",
+  "repository_baseline_commit": "dc7968eb374dd1ad4dc999e4d0087ddbcfac3766",
+  "files": {
+    "docs/superpowers/experiments/bib_submission/README.md": {
+      "sha256": "b13ffa9f818ee7ff24bf03b69288a55f0453062379f0fba013cc474c3728820e"
+    },
+    "docs/superpowers/experiments/bib_submission/execution_plan.md": {
+      "sha256": "cb0ce2fa93329ca25d5b1dc1abbbf752c57c9bdbdaa41aa759dfd345c6240f99"
+    },
+    "docs/superpowers/experiments/bib_submission/task_01_scope_protocol/bib_requirements.md": {
+      "sha256": "b6c43710e685444d0ec41c9e529d3bddec54df99a8b482cb52d66a6cf8906fa8"
+    },
+    "docs/superpowers/experiments/bib_submission/task_01_scope_protocol/scope.md": {
+      "sha256": "7f47a2c6dfdde1b6ba96d56a1b95eef9017a05d9c5bc3199a4df3b00ffe60c80"
+    },
+    "docs/superpowers/experiments/bib_submission/task_01_scope_protocol/protocol.md": {
+      "sha256": "8801b8690ea47dbc857438d0dcc8438273baf6be8262eb594931921e4498c4b0"
+    }
+  },
+  "heldout_results_seen": false,
+  "completed_task": 1,
+  "next_permitted_task": "task_02_review_baselines"
+}

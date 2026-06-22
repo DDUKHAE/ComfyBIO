@@ -17,15 +17,15 @@ _ROOT     = Path(__file__).parent
 _PY_DIR   = _ROOT / "py"
 _LLM_DIR  = _ROOT / "llm_interface"
 
-# Add llm_interface to sys.path so harness_core / harness_nodes are importable
+# Add llm_interface to sys.path so llm_core / llm_web are importable
 if str(_LLM_DIR) not in sys.path:
     sys.path.insert(0, str(_LLM_DIR))
 
 # Web directory for frontend JS
-WEB_DIRECTORY = "./llm_interface/harness_nodes/web"
+WEB_DIRECTORY = "./llm_interface/llm_web/web"
 
-# Import harness_nodes to register /comfybio/* API routes with PromptServer
-import harness_nodes  # noqa: F401
+# Import llm_web to register /comfybio/* API routes with PromptServer
+import llm_web  # noqa: F401
 
 
 @lru_cache(maxsize=1)
@@ -34,10 +34,12 @@ def _collect_biopython_nodes() -> list[type[io.ComfyNode]]:
     nodes: list[type[io.ComfyNode]] = []
     seen: set[str] = set()
 
-    for py_file in sorted(_PY_DIR.glob("*.py")):
+    for py_file in sorted(_PY_DIR.rglob("*.py")):
         if py_file.stem == "__init__":
             continue
-        mod_name = f"comfybio_nodes.{py_file.stem}"
+        # domain/File → domain.File for unique module naming
+        rel = py_file.relative_to(_PY_DIR)
+        mod_name = "comfybio_nodes." + ".".join(rel.with_suffix("").parts)
         spec = importlib.util.spec_from_file_location(mod_name, py_file)
         if spec is None:
             continue

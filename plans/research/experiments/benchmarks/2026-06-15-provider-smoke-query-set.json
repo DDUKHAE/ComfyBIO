@@ -1,0 +1,20 @@
+[
+  {
+    "label": "fasta_parse_basic",
+    "query": "parse a fasta file and summarize sequence ids",
+    "expected_intent": "fasta_parse",
+    "expected_template_id": "fasta_parse"
+  },
+  {
+    "label": "blast_search_basic",
+    "query": "run blast against a nucleotide database and inspect hits",
+    "expected_intent": "blast_search",
+    "expected_template_id": "blast_basic"
+  },
+  {
+    "label": "phylogeny_basic",
+    "query": "read a phylogenetic tree file and inspect tree information",
+    "expected_intent": "phylogeny",
+    "expected_template_id": "phylogeny_basic"
+  }
+]

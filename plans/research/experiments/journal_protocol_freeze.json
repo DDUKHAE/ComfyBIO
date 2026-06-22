@@ -1,0 +1,23 @@
+{
+  "protocol_id": "COMFYBIO-JOURNAL-001",
+  "protocol_version": "1.2",
+  "freeze_date": "2026-06-22",
+  "timezone": "Asia/Seoul",
+  "status": "held-out 실행 전 고정",
+  "repository_baseline_commit": "dc7968eb374dd1ad4dc999e4d0087ddbcfac3766",
+  "files": {
+    "docs/superpowers/experiments/journal_scope.md": {
+      "sha256": "e3465dfa4777bdd3500df2b3e5e9da2f8b5896b71c340fa0c303eeb1b477fb49"
+    },
+    "docs/superpowers/experiments/journal_protocol.md": {
+      "sha256": "87339967d81827cdd7ed76af2a4291a2676208ff060e372f6244aa607902b4dc"
+    }
+  },
+  "amendments": [
+    "docs/superpowers/experiments/journal_protocol_amendment_001.md",
+    "docs/superpowers/experiments/journal_protocol_amendment_002.md"
+  ],
+  "heldout_results_seen": false,
+  "task_2_status": "완료",
+  "next_permitted_task": "Task 3 독립 자연어 query seed set 작성"
+}

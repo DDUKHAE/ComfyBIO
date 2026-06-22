@@ -138,3 +138,56 @@ def test_run_sc_annotate_adds_cell_type_column():
         adata = ad.read_h5ad(out)
         assert "cell_type" in adata.obs.columns
         assert set(adata.obs["cell_type"].unique()).issubset({"TypeA", "TypeB", "Unknown"})
+
+
+def test_run_fastp_returns_stats_dict():
+    import tempfile
+    from pathlib import Path
+    from llm_core.transcriptomics.qc import run_fastp
+
+    _FIXTURES = Path(__file__).parent.parent / "fixtures" / "transcriptomics"
+    with tempfile.TemporaryDirectory() as tmp:
+        result = run_fastp(
+            r1_path=str(_FIXTURES / "reads_R1.fastq"),
+            output_dir=tmp,
+            thread=1,
+        )
+    assert isinstance(result, dict)
+    assert "summary" in result
+    assert result["summary"]["before_filtering"]["total_reads"] == 500
+
+
+def test_run_star_align_builds_correct_command(monkeypatch):
+    import subprocess
+    import tempfile
+    from pathlib import Path
+    from llm_core.transcriptomics.align import run_star_align
+
+    captured = {}
+
+    def fake_run(cmd, **kwargs):
+        captured["cmd"] = cmd
+        # create fake output directory with required file
+        import os
+        out_dir = None
+        for i, part in enumerate(cmd):
+            if part == "--outFileNamePrefix":
+                out_dir = cmd[i + 1]
+                break
+        if out_dir:
+            os.makedirs(out_dir, exist_ok=True)
+            open(out_dir + "Aligned.sortedByCoord.out.bam", "w").close()
+        return subprocess.CompletedProcess(cmd, 0, "", "")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        out = run_star_align(
+            r1_path="/fake/reads.fastq",
+            genome_dir="/fake/genome",
+            output_dir=tmp,
+            threads=2,
+        )
+    assert "STAR" in captured["cmd"][0]
+    assert "--runThreadN" in captured["cmd"]
+    assert "2" in captured["cmd"]

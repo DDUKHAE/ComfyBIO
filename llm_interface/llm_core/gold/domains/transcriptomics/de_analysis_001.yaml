@@ -1,0 +1,24 @@
+query_id: de_analysis_001
+family: differential_expression
+context:
+  n_samples_per_group: 4
+  data_type: bulk_rna_seq
+  organism: homo_sapiens
+
+gold:
+  tier_1_canonical:
+    tools: [edgeR]
+    expected_output_criteria:
+      top10_overlap_min: 1.0
+      has_log2fc_column: true
+      has_padj_column: true
+
+  tier_2_alternative:
+    tools: [DESeq2, limma_voom]
+    functional_equivalence_criteria:
+      top10_overlap_with_canonical: ">= 0.80"
+      has_log2fc_column: ">= 1.0"
+      has_padj_column: ">= 1.0"
+
+  tier_3_invalid:
+    tools: [kallisto, STAR, fastp, scanpy]

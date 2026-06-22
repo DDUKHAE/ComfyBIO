@@ -1,0 +1,149 @@
+domain_id: variant_analysis
+description: "Germline/somatic variant calling and GWAS — CS3"
+steps:
+  - step_id: read_alignment
+    step_name: Read Alignment
+    condition: "sequencer == 'illumina'"
+    tools:
+      - tool_id: BWA-MEM2
+        validity: canonical
+        reason: "Fastest Illumina short-read aligner; GATK best-practice"
+      - tool_id: Bowtie2
+        validity: alternative_valid
+        reason: "Memory-efficient, widely used for ChIP/ATAC and small genomes"
+      - tool_id: minimap2
+        validity: invalid
+        reason: "Optimised for long reads; error-rate mismatch on Illumina data"
+
+  - step_id: read_alignment
+    step_name: Read Alignment
+    condition: "sequencer == 'nanopore' or sequencer == 'pacbio'"
+    tools:
+      - tool_id: minimap2
+        validity: canonical
+        reason: "De-facto long-read aligner (PacBio/Nanopore)"
+      - tool_id: BWA-MEM2
+        validity: invalid
+        reason: "Short-read aligner; high mismatch rate on long reads"
+
+  - step_id: variant_calling
+    step_name: Variant Calling
+    condition: "analysis_type == 'germline'"
+    tools:
+      - tool_id: GATK_HaplotypeCaller
+        validity: canonical
+        reason: "GATK4 best-practice germline SNP/indel caller"
+      - tool_id: DeepVariant
+        validity: alternative_valid
+        reason: "ML-based caller with high accuracy on Illumina short reads"
+      - tool_id: bcftools_call
+        validity: alternative_valid
+        reason: "Fast, lightweight; suitable for population-scale projects"
+
+  - step_id: variant_calling
+    step_name: Variant Calling
+    condition: "analysis_type == 'somatic'"
+    tools:
+      - tool_id: GATK_Mutect2
+        validity: canonical
+        reason: "GATK4 somatic caller with matched-normal support"
+      - tool_id: VarScan2
+        validity: alternative_valid
+        reason: "Flexible somatic caller; works without matched normal"
+      - tool_id: GATK_HaplotypeCaller
+        validity: invalid
+        reason: "Germline caller; not suitable for somatic mutation detection"
+
+  - step_id: variant_filtering
+    step_name: Variant Filtering
+    condition: "n_samples >= 30"
+    tools:
+      - tool_id: GATK_VQSR
+        validity: canonical
+        reason: "Machine-learning filter; requires sufficient samples for training"
+      - tool_id: bcftools_filter
+        validity: alternative_valid
+        reason: "Hard filter; always applicable regardless of cohort size"
+
+  - step_id: variant_filtering
+    step_name: Variant Filtering
+    condition: "n_samples < 30"
+    tools:
+      - tool_id: bcftools_filter
+        validity: canonical
+        reason: "Hard filter is appropriate for small cohorts"
+      - tool_id: GATK_VQSR
+        validity: invalid
+        reason: "Requires large sample set to train the recalibration model"
+
+  - step_id: variant_annotation
+    step_name: Variant Annotation
+    condition: "True"
+    tools:
+      - tool_id: VEP
+        validity: canonical
+        reason: "Ensembl VEP — most comprehensive and widely cited annotation tool"
+      - tool_id: ANNOVAR
+        validity: alternative_valid
+        reason: "Fast, flexible; extensive database support"
+      - tool_id: SnpEff
+        validity: alternative_valid
+        reason: "Open-source; supports many organisms including non-model species"
+
+  - step_id: gwas_qc
+    step_name: GWAS Quality Control
+    condition: "True"
+    tools:
+      - tool_id: PLINK
+        validity: canonical
+        reason: "Standard tool for GWAS QC (missingness, MAF, HWE filters)"
+      - tool_id: PLINK2
+        validity: alternative_valid
+        reason: "Faster modern version; preferred for biobank-scale datasets"
+
+  - step_id: gwas_association
+    step_name: GWAS Association Testing
+    condition: "phenotype_type == 'binary'"
+    tools:
+      - tool_id: PLINK_logistic
+        validity: canonical
+        reason: "Logistic regression for case-control phenotypes"
+      - tool_id: REGENIE
+        validity: alternative_valid
+        reason: "Whole-genome regression model; handles large biobank cohorts"
+
+  - step_id: gwas_association
+    step_name: GWAS Association Testing
+    condition: "phenotype_type == 'continuous'"
+    tools:
+      - tool_id: PLINK_linear
+        validity: canonical
+        reason: "Linear regression for quantitative traits"
+      - tool_id: BOLT-LMM
+        validity: alternative_valid
+        reason: "Mixed model; controls for population stratification"
+
+  - step_id: structural_variant
+    step_name: Structural Variant Detection
+    condition: "True"
+    tools:
+      - tool_id: DELLY
+        validity: canonical
+        reason: "Paired-end and split-read SV detection; widely used"
+      - tool_id: Manta
+        validity: alternative_valid
+        reason: "Fast SV caller from Illumina; strong on large deletions"
+      - tool_id: LUMPY
+        validity: alternative_valid
+        reason: "Probabilistic SV framework; good sensitivity"
+
+  - step_id: copy_number
+    step_name: Copy Number Variation
+    condition: "True"
+    tools:
+      - tool_id: CNVkit
+        validity: canonical
+        reason: "WGS/WES CNV analysis; widely used and well-documented"
+      - tool_id: GATK_CNV
+        validity: alternative_valid
+        reason: "GATK4 CNV pipeline; integrates with GATK variant workflow"

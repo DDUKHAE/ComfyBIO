@@ -1,3 +1,4 @@
+from .evaluator import GoldEvaluator
 from .schema import (
     AdversarialOverride,
     AlternativeGold,
@@ -8,5 +9,5 @@ from .schema import (
 
 __all__ = [
     "AdversarialOverride", "AlternativeGold", "CanonicalGold",
-    "TieredGold", "Verdict",
+    "TieredGold", "Verdict", "GoldEvaluator",
 ]

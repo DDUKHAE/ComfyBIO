@@ -27,10 +27,10 @@ def run_humann3(
     input_path = r1_path
     if r2_path:
         merged = str(out_dir / "merged_reads.fastq.gz")
-        subprocess.run(
-            f"cat {r1_path} {r2_path} > {merged}",
-            shell=True, check=True,
-        )
+        with open(merged, "wb") as fout:
+            for src in (r1_path, r2_path):
+                with open(src, "rb") as fin:
+                    fout.write(fin.read())
         input_path = merged
 
     genefamilies = str(out_dir / "humann_genefamilies.tsv")

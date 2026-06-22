@@ -84,13 +84,10 @@ class HUMAnN3_profile(_Base):
 
         if paired:
             merged = str(out_dir / "merged_reads.fastq.gz")
-            merge_result = subprocess.run(
-                f"cat {r1_path} {r2_path} > {merged}",
-                shell=True, capture_output=True, text=True,
-            )
-            if merge_result.returncode != 0:
-                return io.NodeOutput(str(out_dir), "", "", "", "",
-                                     f"ERROR merging reads:\n{merge_result.stderr[:300]}")
+            with open(merged, "wb") as fout:
+                for src in (r1_path, r2_path):
+                    with open(src, "rb") as fin:
+                        fout.write(fin.read())
             input_path = merged
 
         genefamilies = str(out_dir / "humann_genefamilies.tsv")

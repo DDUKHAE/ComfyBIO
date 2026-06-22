@@ -1,0 +1,140 @@
+domain_id: metagenomics
+description: "Shotgun metagenomics and 16S/amplicon analysis — CS5"
+steps:
+  - step_id: meta_qc
+    step_name: Metagenomics QC & Host Removal
+    condition: "True"
+    tools:
+      - tool_id: fastp
+        validity: canonical
+        reason: "Fast quality trimming for metagenomics"
+      - tool_id: KneadData
+        validity: alternative_valid
+        reason: "QC + host contamination removal in one step"
+      - tool_id: trimmomatic
+        validity: alternative_valid
+        reason: "Established QC tool, widely supported"
+
+  - step_id: taxonomic_classification
+    step_name: Taxonomic Classification
+    condition: "approach == 'marker_gene'"
+    tools:
+      - tool_id: MetaPhlAn4
+        validity: canonical
+        reason: "Marker-gene based, highest species-level accuracy"
+      - tool_id: mOTUs3
+        validity: alternative_valid
+        reason: "Marker-gene alternative with good strain resolution"
+
+  - step_id: taxonomic_classification
+    step_name: Taxonomic Classification
+    condition: "approach == 'kmer'"
+    tools:
+      - tool_id: Kraken2
+        validity: canonical
+        reason: "K-mer based, fast, comprehensive database coverage"
+      - tool_id: Kaiju
+        validity: alternative_valid
+        reason: "Protein-level classification, better for novel organisms"
+
+  - step_id: abundance_estimation
+    step_name: Abundance Estimation
+    condition: "True"
+    tools:
+      - tool_id: Bracken
+        validity: canonical
+        reason: "Bayesian re-estimation from Kraken2 for accurate abundance"
+      - tool_id: MetaPhlAn4
+        validity: alternative_valid
+        reason: "Direct relative abundance from marker gene profiling"
+
+  - step_id: functional_profiling
+    step_name: Functional Profiling
+    condition: "True"
+    tools:
+      - tool_id: HUMAnN3
+        validity: canonical
+        reason: "UniRef-based pathway and gene family profiling"
+      - tool_id: SUPER-FOCUS
+        validity: alternative_valid
+        reason: "Fast functional annotation against SEED subsystems"
+
+  - step_id: meta_assembly
+    step_name: Metagenomic Assembly
+    condition: "True"
+    tools:
+      - tool_id: MEGAHIT
+        validity: canonical
+        reason: "Memory-efficient, fast metagenomic assembler"
+      - tool_id: metaSPAdes
+        validity: alternative_valid
+        reason: "Higher quality assemblies, requires more memory"
+
+  - step_id: gene_prediction
+    step_name: Gene Prediction
+    condition: "True"
+    tools:
+      - tool_id: Prodigal
+        validity: canonical
+        reason: "Standard prokaryotic gene predictor with meta mode"
+      - tool_id: FragGeneScan
+        validity: alternative_valid
+        reason: "Handles fragmented contigs and sequencing errors"
+
+  - step_id: alpha_diversity
+    step_name: Alpha Diversity
+    condition: "True"
+    tools:
+      - tool_id: skbio_alpha
+        validity: canonical
+        reason: "Python scikit-bio for Shannon/Simpson/Chao1 — reproducible"
+      - tool_id: QIIME2_diversity
+        validity: alternative_valid
+        reason: "Full diversity suite with QIIME2 framework"
+
+  - step_id: beta_diversity
+    step_name: Beta Diversity
+    condition: "True"
+    tools:
+      - tool_id: skbio_beta
+        validity: canonical
+        reason: "Bray-Curtis/Jaccard + PCoA via scikit-bio"
+      - tool_id: QIIME2_beta
+        validity: alternative_valid
+        reason: "QIIME2 beta diversity with PERMANOVA testing"
+
+  - step_id: amplicon_16s
+    step_name: 16S Amplicon Analysis
+    condition: "data_type == '16S'"
+    tools:
+      - tool_id: QIIME2
+        validity: canonical
+        reason: "Comprehensive 16S/18S/ITS amplicon analysis pipeline"
+      - tool_id: DADA2
+        validity: alternative_valid
+        reason: "ASV-based denoising in R with high resolution"
+      - tool_id: OTU_clustering
+        validity: invalid
+        reason: "OTU clustering deprecated; ASVs preferred for reproducibility"
+
+  - step_id: binning
+    step_name: Metagenome-Assembled Genome Binning
+    condition: "True"
+    tools:
+      - tool_id: MetaBAT2
+        validity: canonical
+        reason: "TNF + coverage-based binning, widely adopted"
+      - tool_id: MaxBin2
+        validity: alternative_valid
+        reason: "EM-based binning, complementary to MetaBAT2"
+
+  - step_id: bin_quality
+    step_name: MAG Quality Assessment
+    condition: "True"
+    tools:
+      - tool_id: CheckM2
+        validity: canonical
+        reason: "ML-based completeness/contamination estimation"
+      - tool_id: CheckM
+        validity: alternative_valid
+        reason: "Original CheckM with marker gene lineage approach"

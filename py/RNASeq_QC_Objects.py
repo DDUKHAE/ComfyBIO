@@ -31,10 +31,10 @@ class Fastp_trim(_Base):
     @classmethod
     def execute(cls, r1_path, r2_path, output_dir, thread) -> io.NodeOutput:
         from llm_core.transcriptomics.qc import run_fastp
-        stats = run_fastp(
+        actual_dir, stats = run_fastp(
             r1_path=r1_path,
             r2_path=r2_path or None,
             output_dir=output_dir or None,
             thread=thread,
         )
-        return io.NodeOutput(output_dir, json.dumps(stats))
+        return io.NodeOutput(actual_dir, json.dumps(stats))

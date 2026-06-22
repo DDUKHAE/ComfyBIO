@@ -40,7 +40,7 @@ def run_star_align(
 ) -> str:
     out_dir = str(output_dir or tempfile.mkdtemp())
     Path(out_dir).mkdir(parents=True, exist_ok=True)
-    prefix = str(Path(out_dir) / "")
+    prefix = str(Path(out_dir)) + "/"
 
     cmd = [
         "STAR",

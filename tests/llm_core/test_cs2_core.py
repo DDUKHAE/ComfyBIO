@@ -147,7 +147,7 @@ def test_run_fastp_returns_stats_dict():
 
     _FIXTURES = Path(__file__).parent.parent / "fixtures" / "transcriptomics"
     with tempfile.TemporaryDirectory() as tmp:
-        result = run_fastp(
+        actual_dir, result = run_fastp(
             r1_path=str(_FIXTURES / "reads_R1.fastq"),
             output_dir=tmp,
             thread=1,
@@ -155,6 +155,7 @@ def test_run_fastp_returns_stats_dict():
     assert isinstance(result, dict)
     assert "summary" in result
     assert result["summary"]["before_filtering"]["total_reads"] == 500
+    assert actual_dir == tmp
 
 
 def test_run_star_align_builds_correct_command(monkeypatch):
@@ -191,3 +192,6 @@ def test_run_star_align_builds_correct_command(monkeypatch):
     assert "STAR" in captured["cmd"][0]
     assert "--runThreadN" in captured["cmd"]
     assert "2" in captured["cmd"]
+    # Verify prefix has trailing slash so STAR writes files inside out_dir
+    prefix_idx = captured["cmd"].index("--outFileNamePrefix") + 1
+    assert captured["cmd"][prefix_idx].endswith("/")

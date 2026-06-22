@@ -11,7 +11,8 @@ def run_fastp(
     r2_path: str | None = None,
     output_dir: str | None = None,
     thread: int = 4,
-) -> dict:
+) -> tuple[str, dict]:
+    """Run fastp. Returns (output_dir_path, stats_dict)."""
     out_dir = Path(output_dir or tempfile.mkdtemp())
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -33,4 +34,5 @@ def run_fastp(
         cmd += ["--in2", r2_path, "--out2", r2_out]
 
     subprocess.run(cmd, check=True, capture_output=True)
-    return json.loads(Path(json_out).read_text())
+    stats = json.loads(Path(json_out).read_text())
+    return str(out_dir), stats

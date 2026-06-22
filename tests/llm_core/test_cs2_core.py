@@ -118,3 +118,23 @@ def test_run_sc_cluster_adds_cluster_column():
         adata = ad.read_h5ad(out)
         assert "leiden" in adata.obs.columns
         assert adata.obs["leiden"].nunique() >= 1
+
+
+def test_run_sc_annotate_adds_cell_type_column():
+    import tempfile
+    from pathlib import Path
+    from llm_core.transcriptomics.sc import run_sc_preprocess, run_sc_cluster, run_sc_annotate
+    import anndata as ad
+    with tempfile.TemporaryDirectory() as tmp:
+        input_path = _make_synthetic_adata(tmp)
+        pre = run_sc_preprocess(input_path=input_path, min_genes=5, min_cells=3,
+                                n_top_genes=100, output_path=str(Path(tmp) / "pre.h5ad"))
+        clustered = run_sc_cluster(input_path=pre, resolution=0.3, algorithm="leiden",
+                                   output_path=str(Path(tmp) / "clustered.h5ad"))
+        marker_genes = {"TypeA": ["GENE_0000", "GENE_0001"], "TypeB": ["GENE_0100", "GENE_0101"]}
+        out = run_sc_annotate(input_path=clustered, marker_genes=marker_genes,
+                              output_path=str(Path(tmp) / "annotated.h5ad"))
+        assert Path(out).exists()
+        adata = ad.read_h5ad(out)
+        assert "cell_type" in adata.obs.columns
+        assert set(adata.obs["cell_type"].unique()).issubset({"TypeA", "TypeB", "Unknown"})

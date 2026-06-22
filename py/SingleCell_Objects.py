@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from typing_extensions import override
 # pyrefly: ignore [missing-import]
 from comfy_api.latest import io
 

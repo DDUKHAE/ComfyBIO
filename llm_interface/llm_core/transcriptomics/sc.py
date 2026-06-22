@@ -62,26 +62,41 @@ def run_sc_annotate(
     """Assign cell type labels to clusters based on marker gene expression."""
     import numpy as np
     import anndata as ad
-    import scanpy as sc
 
     adata = ad.read_h5ad(input_path)
-    cluster_col = "leiden" if "leiden" in adata.obs.columns else "louvain"
 
-    cell_types: list[str] = []
-    for cluster in adata.obs[cluster_col]:
+    cluster_col = None
+    for col in ("leiden", "louvain"):
+        if col in adata.obs.columns:
+            cluster_col = col
+            break
+    if cluster_col is None:
+        raise ValueError(
+            "No cluster column found in adata.obs. Run run_sc_cluster() first "
+            "(expected 'leiden' or 'louvain' column)."
+        )
+
+    # Compute score per cluster (not per cell) then broadcast
+    clusters = adata.obs[cluster_col].unique()
+    cluster_labels: dict[str, str] = {}
+    for cluster in clusters:
+        mask = adata.obs[cluster_col] == cluster
         best_type = "Unknown"
         best_score = -1.0
         for cell_type, markers in marker_genes.items():
             present = [g for g in markers if g in adata.var_names]
             if not present:
                 continue
-            score = float(np.mean(adata[adata.obs[cluster_col] == cluster, present].X.mean(axis=0)))
+            cluster_data = adata[mask, present].X
+            if hasattr(cluster_data, "toarray"):
+                cluster_data = cluster_data.toarray()
+            score = float(np.mean(cluster_data))
             if score > best_score:
                 best_score = score
                 best_type = cell_type
-        cell_types.append(best_type)
+        cluster_labels[cluster] = best_type
 
-    adata.obs["cell_type"] = cell_types
+    adata.obs["cell_type"] = adata.obs[cluster_col].map(cluster_labels)
 
     out = output_path or str(Path(tempfile.mkdtemp()) / "annotated.h5ad")
     Path(out).parent.mkdir(parents=True, exist_ok=True)

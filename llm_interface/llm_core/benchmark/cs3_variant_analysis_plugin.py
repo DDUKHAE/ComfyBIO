@@ -14,6 +14,7 @@ from llm_core.tsr.loader import load_domain_tsr
 from llm_core.tsr.schema import DomainTSR
 
 from .domain_plugin import DomainPlugin
+from .harness_mixin import HarnessMixin
 from .query_schema import HeldOutQuery
 
 _GOLD_DIR = Path(__file__).resolve().parent.parent / "gold" / "domains" / "variant_analysis"
@@ -34,7 +35,7 @@ _FAMILIES = [
 ]
 
 
-class CS3VariantAnalysisPlugin(DomainPlugin):
+class CS3VariantAnalysisPlugin(DomainPlugin, HarnessMixin):
 
     @property
     def domain_id(self) -> str:

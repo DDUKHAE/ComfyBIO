@@ -14,6 +14,7 @@ from llm_core.tsr.loader import load_domain_tsr
 from llm_core.tsr.schema import DomainTSR
 
 from .domain_plugin import DomainPlugin
+from .harness_mixin import HarnessMixin
 from .query_schema import HeldOutQuery
 
 _GOLD_DIR = Path(__file__).resolve().parent.parent / "gold" / "domains" / "transcriptomics"
@@ -26,7 +27,7 @@ _FAMILIES = [
 ]
 
 
-class CS2TranscriptomicsPlugin(DomainPlugin):
+class CS2TranscriptomicsPlugin(DomainPlugin, HarnessMixin):
 
     @property
     def domain_id(self) -> str:

@@ -1,0 +1,62 @@
+domain_id: bioinformatics
+description: "Sequence bioinformatics via Biopython — CS1"
+steps:
+  - step_id: sequence_parsing
+    step_name: Sequence Parsing
+    condition: "True"
+    tools:
+      - tool_id: biopython_seqio
+        validity: canonical
+        reason: "Primary Biopython sequence I/O"
+
+  - step_id: pairwise_alignment
+    step_name: Pairwise Alignment
+    condition: "True"
+    tools:
+      - tool_id: biopython_pairwise2
+        validity: canonical
+        reason: "Biopython built-in pairwise aligner"
+      - tool_id: biopython_align_pairwisealigner
+        validity: alternative_valid
+        reason: "Newer Biopython PairwiseAligner API"
+
+  - step_id: multiple_alignment
+    step_name: Multiple Sequence Alignment
+    condition: "True"
+    tools:
+      - tool_id: muscle
+        validity: canonical
+        reason: "Fast and accurate MSA"
+      - tool_id: clustalw
+        validity: alternative_valid
+        reason: "Classic MSA tool"
+      - tool_id: mafft
+        validity: alternative_valid
+        reason: "High accuracy for divergent sequences"
+
+  - step_id: blast_search
+    step_name: BLAST Search
+    condition: "True"
+    tools:
+      - tool_id: biopython_blast_ncbiwww
+        validity: canonical
+        reason: "NCBI remote BLAST via Biopython"
+      - tool_id: blast_cli
+        validity: alternative_valid
+        reason: "Local BLAST+ command-line"
+
+  - step_id: phylogeny
+    step_name: Phylogenetic Analysis
+    condition: "True"
+    tools:
+      - tool_id: biopython_phylo
+        validity: canonical
+        reason: "Biopython Phylo module"
+
+  - step_id: entrez_fetch
+    step_name: Entrez Database Fetch
+    condition: "True"
+    tools:
+      - tool_id: biopython_entrez
+        validity: canonical
+        reason: "Biopython Entrez efetch/esearch"

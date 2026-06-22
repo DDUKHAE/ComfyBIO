@@ -1,0 +1,102 @@
+domain_id: transcriptomics
+description: "Bulk RNA-seq and scRNA-seq analysis — CS2"
+steps:
+  - step_id: adapter_trimming
+    step_name: Adapter Trimming
+    condition: "True"
+    tools:
+      - tool_id: fastp
+        validity: canonical
+        reason: "Fast, all-in-one quality control"
+      - tool_id: trimmomatic
+        validity: alternative_valid
+        reason: "Widely used, highly configurable"
+      - tool_id: cutadapt
+        validity: alternative_valid
+        reason: "Flexible adapter trimmer"
+
+  - step_id: alignment
+    step_name: Genome Alignment
+    condition: "data_type == 'short_read' and read_length >= 75"
+    tools:
+      - tool_id: STAR
+        validity: canonical
+        reason: "Splice-aware aligner, RNA-seq standard"
+      - tool_id: HISAT2
+        validity: alternative_valid
+        reason: "Memory-efficient splice-aware aligner"
+      - tool_id: minimap2
+        validity: invalid
+        reason: "Designed for long reads; cannot handle short-read RNA-seq error profile"
+
+  - step_id: alignment
+    step_name: Genome Alignment
+    condition: "data_type == 'long_read'"
+    tools:
+      - tool_id: minimap2
+        validity: canonical
+        reason: "Optimal for long-read RNA-seq (PacBio/Nanopore)"
+      - tool_id: STAR
+        validity: invalid
+        reason: "Short-read aligner; fails on long-read error rates"
+
+  - step_id: pseudo_alignment
+    step_name: Pseudo-alignment / Quantification
+    condition: "quantification_only == True"
+    tools:
+      - tool_id: kallisto
+        validity: canonical
+        reason: "Fast pseudo-alignment, sufficient for quantification"
+      - tool_id: salmon
+        validity: alternative_valid
+        reason: "Quasi-mapping with GC-bias correction"
+
+  - step_id: de_analysis
+    step_name: Differential Expression Analysis
+    condition: "n_samples_per_group < 6"
+    tools:
+      - tool_id: edgeR
+        validity: canonical
+        reason: "Best performance with small sample sizes"
+      - tool_id: DESeq2
+        validity: alternative_valid
+        reason: "Acceptable but less optimal for n<6"
+
+  - step_id: de_analysis
+    step_name: Differential Expression Analysis
+    condition: "n_samples_per_group >= 6"
+    tools:
+      - tool_id: DESeq2
+        validity: canonical
+        reason: "Negative binomial model, well-validated for bulk RNA-seq"
+      - tool_id: edgeR
+        validity: alternative_valid
+        reason: "Also valid for larger sample sizes"
+      - tool_id: limma_voom
+        validity: alternative_valid
+        reason: "Good for large studies"
+
+  - step_id: sc_clustering
+    step_name: Single-cell Clustering
+    condition: "assay == 'scrna_seq'"
+    tools:
+      - tool_id: leiden
+        validity: canonical
+        reason: "Superior community detection; default in Scanpy"
+      - tool_id: louvain
+        validity: alternative_valid
+        reason: "Widely used; predecessor to Leiden"
+      - tool_id: kmeans
+        validity: invalid
+        reason: "Assumes spherical clusters; inappropriate for single-cell data"
+
+  - step_id: sc_annotation
+    step_name: Cell Type Annotation
+    condition: "assay == 'scrna_seq'"
+    tools:
+      - tool_id: SingleR
+        validity: canonical
+        reason: "Reference-based automated annotation"
+      - tool_id: CellTypist
+        validity: alternative_valid
+        reason: "Machine learning-based annotation"

@@ -1,0 +1,23 @@
+query_id: read_quantification_001
+family: read_quantification
+nl_text: "I have aligned BAM files from STAR and a GTF annotation file. I need to count reads per gene to create a count matrix for downstream DE analysis."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  input_type: sorted_bam
+  annotation: gtf
+
+gold:
+  tier_1_canonical:
+    tools: [featureCounts]
+    expected_output_criteria:
+      has_count_matrix: true
+      assignment_rate: ">= 0.6"
+
+  tier_2_alternative:
+    tools: [HTSeq, RSEM]
+    functional_equivalence_criteria:
+      has_count_matrix: ">= 1.0"
+
+  tier_3_invalid:
+    tools: [kallisto, DESeq2]

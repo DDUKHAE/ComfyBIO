@@ -1,0 +1,23 @@
+query_id: sc_preprocessing_001
+family: sc_preprocessing
+nl_text: "I have 10x Genomics single-cell RNA-seq data in h5ad format. I need to filter low-quality cells, normalize, and find highly variable genes before clustering."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  assay: scrna_seq
+  input_format: h5ad
+
+gold:
+  tier_1_canonical:
+    tools: [scanpy]
+    expected_output_criteria:
+      n_cells_after: ">= 100"
+      has_hvg: true
+
+  tier_2_alternative:
+    tools: [Seurat]
+    functional_equivalence_criteria:
+      n_cells_after: ">= 100"
+
+  tier_3_invalid:
+    tools: [DESeq2, featureCounts, fastp]

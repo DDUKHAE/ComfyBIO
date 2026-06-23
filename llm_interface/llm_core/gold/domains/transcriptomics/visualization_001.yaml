@@ -1,0 +1,21 @@
+query_id: visualization_001
+family: visualization
+nl_text: "I need to create a publication-quality heatmap showing expression levels of top 50 differentially expressed genes across sample groups."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  plot_type: heatmap
+
+gold:
+  tier_1_canonical:
+    tools: [matplotlib]
+    expected_output_criteria:
+      has_output_file: true
+
+  tier_2_alternative:
+    tools: [seaborn, plotly]
+    functional_equivalence_criteria:
+      has_output_file: ">= 1.0"
+
+  tier_3_invalid:
+    tools: [DESeq2, STAR]

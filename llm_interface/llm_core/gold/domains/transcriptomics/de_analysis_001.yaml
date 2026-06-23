@@ -1,5 +1,8 @@
 query_id: de_analysis_001
 family: differential_expression
+nl_text: "I have RNA-seq count data with 4 samples per group (treated vs control). I need to identify differentially expressed genes with adjusted p-value < 0.05."
+difficulty: medium
+tool_specificity: goal_specified
 context:
   n_samples_per_group: 4
   data_type: bulk_rna_seq

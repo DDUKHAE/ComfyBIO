@@ -1,0 +1,23 @@
+query_id: sc_trajectory_001
+family: sc_trajectory
+nl_text: "I have preprocessed and clustered scRNA-seq data of differentiating cells. I want to infer developmental trajectories and RNA velocity."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  assay: scrna_seq
+  has_spliced_unspliced: true
+
+gold:
+  tier_1_canonical:
+    tools: [scVelo]
+    expected_output_criteria:
+      has_velocity: true
+      has_latent_time: true
+
+  tier_2_alternative:
+    tools: [Monocle3]
+    functional_equivalence_criteria:
+      has_velocity: ">= 1.0"
+
+  tier_3_invalid:
+    tools: [DESeq2, leiden, fastp]

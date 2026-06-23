@@ -1,0 +1,23 @@
+query_id: pathway_enrichment_001
+family: pathway_enrichment
+nl_text: "I have a list of significantly differentially expressed genes. I want to find enriched biological pathways and GO terms."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  input_type: gene_list
+  organism: homo_sapiens
+
+gold:
+  tier_1_canonical:
+    tools: [clusterProfiler]
+    expected_output_criteria:
+      n_enriched_terms: ">= 1"
+      has_padj_column: true
+
+  tier_2_alternative:
+    tools: [GSEA, fgsea]
+    functional_equivalence_criteria:
+      n_enriched_terms: ">= 1"
+
+  tier_3_invalid:
+    tools: [DESeq2, STAR, fastp]

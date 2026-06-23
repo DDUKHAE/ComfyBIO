@@ -1,0 +1,22 @@
+query_id: pseudo_alignment_001
+family: pseudo_alignment
+nl_text: "I want fast transcript-level quantification of RNA-seq reads without full genome alignment. I have a reference transcriptome FASTA."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  approach: pseudo_alignment
+
+gold:
+  tier_1_canonical:
+    tools: [kallisto]
+    expected_output_criteria:
+      pseudoalignment_rate: ">= 0.7"
+      has_abundance_tsv: true
+
+  tier_2_alternative:
+    tools: [salmon]
+    functional_equivalence_criteria:
+      pseudoalignment_rate: ">= 0.6"
+
+  tier_3_invalid:
+    tools: [STAR, bowtie2]

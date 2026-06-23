@@ -1,0 +1,23 @@
+query_id: adapter_trimming_001
+family: adapter_trimming
+nl_text: "My paired-end RNA-seq reads have Illumina TruSeq adapters. I need to trim the adapters and remove reads shorter than 50 bp before alignment."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  data_type: short_read
+  paired_end: true
+
+gold:
+  tier_1_canonical:
+    tools: [fastp]
+    expected_output_criteria:
+      pass_rate: ">= 0.8"
+      has_json_report: true
+
+  tier_2_alternative:
+    tools: [trimmomatic, cutadapt]
+    functional_equivalence_criteria:
+      pass_rate: ">= 0.7"
+
+  tier_3_invalid:
+    tools: []

@@ -1,0 +1,22 @@
+query_id: raw_qc_001
+family: raw_qc
+nl_text: "I received FASTQ files from an Illumina sequencer. Before any analysis, I want to check the quality of the raw reads and generate a QC report."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  data_type: short_read
+
+gold:
+  tier_1_canonical:
+    tools: [FastQC]
+    expected_output_criteria:
+      has_html_report: true
+      has_per_base_quality: true
+
+  tier_2_alternative:
+    tools: [MultiQC]
+    functional_equivalence_criteria:
+      has_html_report: ">= 1.0"
+
+  tier_3_invalid:
+    tools: []

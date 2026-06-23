@@ -1,5 +1,8 @@
 query_id: sc_clustering_001
 family: sc_clustering
+nl_text: "I have preprocessed scRNA-seq data with PCA done. I want to cluster the cells into biologically meaningful groups."
+difficulty: medium
+tool_specificity: goal_specified
 context:
   assay: scrna_seq
   n_cells: 100

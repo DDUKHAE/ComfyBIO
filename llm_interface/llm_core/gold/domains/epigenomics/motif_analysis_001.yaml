@@ -1,0 +1,20 @@
+query_id: motif_analysis_001
+family: motif_analysis
+nl_text: "I have CTCF ChIP-seq peak sequences. I want to identify enriched DNA motifs to confirm CTCF binding and find co-enriched transcription factor motifs."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  analysis_type: de_novo_motif
+
+gold:
+  tier_1_canonical:
+    tools: [HOMER_findMotifs]
+    expected_output_criteria:
+      n_motifs_found: ">= 1"
+      has_html_report: true
+  tier_2_alternative:
+    tools: [MEME-ChIP]
+    functional_equivalence_criteria:
+      n_motifs_found: ">= 1"
+  tier_3_invalid:
+    tools: [DESeq2, STAR, featureCounts]

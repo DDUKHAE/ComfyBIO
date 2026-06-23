@@ -1,0 +1,21 @@
+query_id: peak_annotation_001
+family: peak_annotation
+nl_text: "I have a BED file of ChIP-seq peaks and want to annotate each peak with the nearest gene and genomic feature (promoter, intron, intergenic, etc.)."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  input_format: bed
+  organism: homo_sapiens
+
+gold:
+  tier_1_canonical:
+    tools: [ChIPseeker]
+    expected_output_criteria:
+      has_annotation_table: true
+      has_gene_column: true
+  tier_2_alternative:
+    tools: [HOMER_annotatePeaks]
+    functional_equivalence_criteria:
+      has_annotation_table: ">= 1.0"
+  tier_3_invalid:
+    tools: [DESeq2, featureCounts]

@@ -1,0 +1,21 @@
+query_id: dmr_analysis_001
+family: dmr_analysis
+nl_text: "I have CpG methylation coverage files from cancer patients and healthy controls. I need to identify differentially methylated regions (DMRs) between the two groups."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  comparison: cancer_vs_normal
+  n_samples_per_group: 5
+
+gold:
+  tier_1_canonical:
+    tools: [methylKit]
+    expected_output_criteria:
+      n_dmr: ">= 1"
+      has_qvalue_column: true
+  tier_2_alternative:
+    tools: [DSS]
+    functional_equivalence_criteria:
+      n_dmr: ">= 1"
+  tier_3_invalid:
+    tools: [DESeq2, edgeR, STAR]

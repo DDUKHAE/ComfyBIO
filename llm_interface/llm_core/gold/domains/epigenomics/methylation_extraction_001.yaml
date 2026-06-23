@@ -1,0 +1,21 @@
+query_id: methylation_extraction_001
+family: methylation_extraction
+nl_text: "I have Bismark-aligned BAM files from WGBS. I need to extract CpG methylation levels at every genomic CpG site."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  aligner: Bismark
+  context_type: CpG
+
+gold:
+  tier_1_canonical:
+    tools: [Bismark_extractor]
+    expected_output_criteria:
+      has_coverage_file: true
+      n_cpg_sites: ">= 1000"
+  tier_2_alternative:
+    tools: [MethylDackel]
+    functional_equivalence_criteria:
+      has_coverage_file: ">= 1.0"
+  tier_3_invalid:
+    tools: [featureCounts, MACS3]

@@ -1,0 +1,20 @@
+query_id: atac_peaks_001
+family: atac_peaks
+nl_text: "I have deduplicated ATAC-seq BAM files. I need to call open chromatin peaks using the shifted read approach appropriate for ATAC-seq."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  assay: atac_seq
+
+gold:
+  tier_1_canonical:
+    tools: [MACS3_atac]
+    expected_output_criteria:
+      n_peaks: ">= 10000"
+      frip_score: ">= 0.1"
+  tier_2_alternative:
+    tools: [Genrich]
+    functional_equivalence_criteria:
+      n_peaks: ">= 5000"
+  tier_3_invalid:
+    tools: [MACS3, featureCounts]

@@ -1,0 +1,21 @@
+query_id: bisulfite_alignment_001
+family: bisulfite_alignment
+nl_text: "I have whole-genome bisulfite sequencing (WGBS) FASTQ files. I need to align them to the human genome to measure DNA methylation."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  assay: wgbs
+  organism: homo_sapiens
+
+gold:
+  tier_1_canonical:
+    tools: [Bismark]
+    expected_output_criteria:
+      mapping_rate: ">= 0.60"
+      has_bam: true
+  tier_2_alternative:
+    tools: [bwa-meth]
+    functional_equivalence_criteria:
+      mapping_rate: ">= 0.55"
+  tier_3_invalid:
+    tools: [STAR, Bowtie2, BWA-MEM2]

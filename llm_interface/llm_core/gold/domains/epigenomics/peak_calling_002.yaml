@@ -1,0 +1,21 @@
+query_id: peak_calling_002
+family: peak_calling
+nl_text: "I have ChIP-seq data for the repressive histone mark H3K27me3. I need to call broad chromatin domains rather than narrow peaks."
+difficulty: medium
+tool_specificity: context_only
+context:
+  assay: chip_broad
+  histone_mark: H3K27me3
+
+gold:
+  tier_1_canonical:
+    tools: [MACS3_broad]
+    expected_output_criteria:
+      n_peaks: ">= 10"
+      has_broadpeak: true
+  tier_2_alternative:
+    tools: [SICER2]
+    functional_equivalence_criteria:
+      n_peaks: ">= 5"
+  tier_3_invalid:
+    tools: [MACS3, featureCounts]

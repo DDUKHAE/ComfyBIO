@@ -1,0 +1,19 @@
+query_id: signal_track_001
+family: signal_track
+nl_text: "I have ChIP-seq BAM files and want to generate normalized bigWig signal tracks for visualization in a genome browser."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  normalization: RPKM
+
+gold:
+  tier_1_canonical:
+    tools: [deeptools_bamCoverage]
+    expected_output_criteria:
+      has_bigwig: true
+  tier_2_alternative:
+    tools: [MACS3_bdgcmp]
+    functional_equivalence_criteria:
+      has_bigwig: ">= 1.0"
+  tier_3_invalid:
+    tools: [featureCounts, samtools]

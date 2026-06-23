@@ -1,0 +1,21 @@
+query_id: visualization_001
+family: visualization
+nl_text: "I have bigWig files for H3K27ac ChIP-seq and want to create a heatmap showing signal enrichment around transcription start sites (TSS) across all genes."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  plot_type: heatmap
+  reference_point: TSS
+
+gold:
+  tier_1_canonical:
+    tools: [deeptools_heatmap]
+    expected_output_criteria:
+      has_heatmap_image: true
+      has_matrix_file: true
+  tier_2_alternative:
+    tools: [IGV]
+    functional_equivalence_criteria:
+      has_heatmap_image: ">= 1.0"
+  tier_3_invalid:
+    tools: [matplotlib, seaborn, DESeq2]

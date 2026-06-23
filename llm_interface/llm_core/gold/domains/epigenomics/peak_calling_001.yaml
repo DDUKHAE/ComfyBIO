@@ -1,0 +1,21 @@
+query_id: peak_calling_001
+family: peak_calling
+nl_text: "I have aligned ChIP-seq BAM files for CTCF binding sites with a matched input control. I need to call narrow peaks to identify CTCF binding locations."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  assay: chip_narrow
+  has_input_control: true
+
+gold:
+  tier_1_canonical:
+    tools: [MACS3]
+    expected_output_criteria:
+      n_peaks: ">= 100"
+      has_narrowpeak: true
+  tier_2_alternative:
+    tools: [SEACR]
+    functional_equivalence_criteria:
+      n_peaks: ">= 50"
+  tier_3_invalid:
+    tools: [featureCounts, DESeq2]

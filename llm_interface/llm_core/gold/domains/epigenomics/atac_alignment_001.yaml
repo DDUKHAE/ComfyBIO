@@ -1,0 +1,21 @@
+query_id: atac_alignment_001
+family: atac_alignment
+nl_text: "I have ATAC-seq paired-end FASTQ files from human PBMCs. I need to align the reads to hg38 to identify open chromatin regions."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  assay: atac_seq
+  organism: homo_sapiens
+
+gold:
+  tier_1_canonical:
+    tools: [Bowtie2]
+    expected_output_criteria:
+      mapping_rate: ">= 0.80"
+      has_sorted_bam: true
+  tier_2_alternative:
+    tools: [BWA-MEM2]
+    functional_equivalence_criteria:
+      mapping_rate: ">= 0.75"
+  tier_3_invalid:
+    tools: [STAR, Bismark]

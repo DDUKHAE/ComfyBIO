@@ -1,0 +1,21 @@
+query_id: scaffolding_001
+family: scaffolding
+nl_text: "I have a draft assembly with many contigs. I want to scaffold them into chromosomal-scale sequences using a closely related reference genome."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  has_reference: true
+  method: reference_guided
+
+gold:
+  tier_1_canonical:
+    tools: [RagTag]
+    expected_output_criteria:
+      has_scaffolds: true
+      n_scaffolds: ">= 1"
+  tier_2_alternative:
+    tools: [3D-DNA]
+    functional_equivalence_criteria:
+      has_scaffolds: ">= 1.0"
+  tier_3_invalid:
+    tools: [SPAdes, Flye]

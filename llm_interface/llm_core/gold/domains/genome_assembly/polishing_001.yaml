@@ -1,0 +1,21 @@
+query_id: polishing_001
+family: polishing
+nl_text: "I have a draft Nanopore assembly with high error rate. I need to polish it using the original Nanopore reads to improve base-level accuracy."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  read_type: long_read
+  sequencer: nanopore
+
+gold:
+  tier_1_canonical:
+    tools: [Medaka]
+    expected_output_criteria:
+      has_consensus: true
+      qv_improvement: ">= 0"
+  tier_2_alternative:
+    tools: [Racon]
+    functional_equivalence_criteria:
+      has_consensus: ">= 1.0"
+  tier_3_invalid:
+    tools: [Pilon, BWA-MEM2]

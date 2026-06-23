@@ -1,0 +1,20 @@
+query_id: contamination_check_001
+family: contamination_check
+nl_text: "I have assembled a genome from environmental DNA. Before submission, I need to check for contamination from other organisms or sequencing artifacts."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  assembly_source: environmental
+
+gold:
+  tier_1_canonical:
+    tools: [BlobTools]
+    expected_output_criteria:
+      has_blobplot: true
+      has_coverage_gc_table: true
+  tier_2_alternative:
+    tools: [Kraken2]
+    functional_equivalence_criteria:
+      has_blobplot: ">= 1.0"
+  tier_3_invalid:
+    tools: [QUAST, BUSCO]

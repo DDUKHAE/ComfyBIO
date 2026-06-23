@@ -1,0 +1,20 @@
+query_id: repeat_masking_001
+family: repeat_masking
+nl_text: "I have a eukaryotic genome assembly and need to identify and soft-mask repetitive elements before gene annotation."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  organism_type: eukaryote
+
+gold:
+  tier_1_canonical:
+    tools: [RepeatMasker]
+    expected_output_criteria:
+      has_masked_fasta: true
+      repeat_fraction: ">= 0.0"
+  tier_2_alternative:
+    tools: [RepeatModeler]
+    functional_equivalence_criteria:
+      has_masked_fasta: ">= 1.0"
+  tier_3_invalid:
+    tools: [Prokka, MAKER]

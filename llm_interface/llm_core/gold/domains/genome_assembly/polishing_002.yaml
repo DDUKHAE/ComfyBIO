@@ -1,0 +1,21 @@
+query_id: polishing_002
+family: polishing
+nl_text: "I have a draft long-read assembly and Illumina short reads from the same sample. I want to use the high-accuracy short reads to correct small indels and SNPs in the assembly."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  read_type: hybrid
+  polish_reads: illumina
+
+gold:
+  tier_1_canonical:
+    tools: [Pilon]
+    expected_output_criteria:
+      has_polished_assembly: true
+      n_changes: ">= 0"
+  tier_2_alternative:
+    tools: [NextPolish]
+    functional_equivalence_criteria:
+      has_polished_assembly: ">= 1.0"
+  tier_3_invalid:
+    tools: [Medaka, Racon]

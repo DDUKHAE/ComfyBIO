@@ -1,0 +1,21 @@
+query_id: short_read_assembly_001
+family: short_read_assembly
+nl_text: "I have Illumina paired-end WGS reads from a bacterial isolate. I need to perform de novo genome assembly to reconstruct the complete genome sequence."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  read_type: short_read
+  organism_type: bacteria
+
+gold:
+  tier_1_canonical:
+    tools: [SPAdes]
+    expected_output_criteria:
+      has_contigs: true
+      n50: ">= 10000"
+  tier_2_alternative:
+    tools: [ABySS]
+    functional_equivalence_criteria:
+      has_contigs: ">= 1.0"
+  tier_3_invalid:
+    tools: [Velvet, Flye]

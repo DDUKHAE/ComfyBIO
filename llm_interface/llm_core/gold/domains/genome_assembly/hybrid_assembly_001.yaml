@@ -1,0 +1,21 @@
+query_id: hybrid_assembly_001
+family: hybrid_assembly
+nl_text: "I have both Illumina short reads and Oxford Nanopore long reads from a bacterial strain. I want to use both datasets together for a more accurate hybrid assembly."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  read_type: hybrid
+  organism_type: bacteria
+
+gold:
+  tier_1_canonical:
+    tools: [Unicycler]
+    expected_output_criteria:
+      has_assembly: true
+      n_contigs: ">= 1"
+  tier_2_alternative:
+    tools: [SPAdes_hybrid]
+    functional_equivalence_criteria:
+      has_assembly: ">= 1.0"
+  tier_3_invalid:
+    tools: [Flye, Canu]

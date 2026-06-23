@@ -1,0 +1,22 @@
+query_id: prokaryote_annotation_001
+family: prokaryote_annotation
+nl_text: "I have a completed bacterial genome assembly. I need to annotate protein-coding genes, rRNAs, tRNAs, and other features."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  kingdom: prokaryote
+  organism_type: bacteria
+
+gold:
+  tier_1_canonical:
+    tools: [Prokka]
+    expected_output_criteria:
+      n_genes: ">= 500"
+      has_gff: true
+      has_gbk: true
+  tier_2_alternative:
+    tools: [RAST]
+    functional_equivalence_criteria:
+      n_genes: ">= 400"
+  tier_3_invalid:
+    tools: [Augustus, MAKER, BRAKER3]

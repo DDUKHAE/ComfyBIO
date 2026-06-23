@@ -1,0 +1,22 @@
+query_id: long_read_assembly_001
+family: long_read_assembly
+nl_text: "I have Oxford Nanopore long reads (R9.4.1 flow cell) from a fungal genome. I need to assemble a high-quality draft genome."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  read_type: long_read
+  sequencer: nanopore
+  organism_type: eukaryote
+
+gold:
+  tier_1_canonical:
+    tools: [Flye]
+    expected_output_criteria:
+      has_assembly: true
+      n50: ">= 100000"
+  tier_2_alternative:
+    tools: [Hifiasm, Canu]
+    functional_equivalence_criteria:
+      has_assembly: ">= 1.0"
+  tier_3_invalid:
+    tools: [SPAdes, Velvet]

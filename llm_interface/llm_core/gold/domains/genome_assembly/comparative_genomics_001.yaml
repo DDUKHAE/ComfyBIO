@@ -1,0 +1,21 @@
+query_id: comparative_genomics_001
+family: comparative_genomics
+nl_text: "I have two closely related bacterial genome assemblies and want to perform whole-genome alignment to identify syntenic regions and structural differences."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  divergence: low
+  organism_type: bacteria
+
+gold:
+  tier_1_canonical:
+    tools: [MUMmer]
+    expected_output_criteria:
+      has_alignment: true
+      alignment_coverage: ">= 0.5"
+  tier_2_alternative:
+    tools: [minimap2_asm]
+    functional_equivalence_criteria:
+      has_alignment: ">= 1.0"
+  tier_3_invalid:
+    tools: [BWA-MEM2, STAR]

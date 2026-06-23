@@ -1,0 +1,21 @@
+query_id: eukaryote_annotation_001
+family: eukaryote_annotation
+nl_text: "I have a repeat-masked fungal genome assembly along with RNA-seq evidence. I need to perform structural gene annotation to predict gene models."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  kingdom: eukaryote
+  has_rnaseq_evidence: true
+
+gold:
+  tier_1_canonical:
+    tools: [MAKER]
+    expected_output_criteria:
+      n_genes: ">= 100"
+      has_gff: true
+  tier_2_alternative:
+    tools: [BRAKER3]
+    functional_equivalence_criteria:
+      n_genes: ">= 80"
+  tier_3_invalid:
+    tools: [Prokka, RAST]

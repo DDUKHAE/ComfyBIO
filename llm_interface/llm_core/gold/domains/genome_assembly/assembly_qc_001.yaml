@@ -1,0 +1,20 @@
+query_id: assembly_qc_001
+family: assembly_qc
+nl_text: "I have assembled a bacterial genome and want to evaluate the quality of my assembly — checking N50, total length, number of contigs, and completeness."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  organism_type: bacteria
+
+gold:
+  tier_1_canonical:
+    tools: [QUAST]
+    expected_output_criteria:
+      has_n50: true
+      has_report: true
+  tier_2_alternative:
+    tools: [BUSCO]
+    functional_equivalence_criteria:
+      has_n50: ">= 1.0"
+  tier_3_invalid:
+    tools: []

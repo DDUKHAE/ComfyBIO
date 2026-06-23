@@ -1,0 +1,21 @@
+query_id: taxonomic_classification_002
+family: taxonomic_classification
+nl_text: "I need fast k-mer-based classification of metagenomics reads against a comprehensive database including viruses, bacteria, and archaea."
+difficulty: medium
+tool_specificity: context_only
+context:
+  approach: kmer
+  database_scope: comprehensive
+
+gold:
+  tier_1_canonical:
+    tools: [Kraken2]
+    expected_output_criteria:
+      classification_rate: ">= 0.5"
+      has_report: true
+  tier_2_alternative:
+    tools: [Kaiju]
+    functional_equivalence_criteria:
+      classification_rate: ">= 0.4"
+  tier_3_invalid:
+    tools: []

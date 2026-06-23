@@ -1,0 +1,21 @@
+query_id: abundance_estimation_001
+family: abundance_estimation
+nl_text: "I have Kraken2 classification output and want to estimate accurate species-level relative abundances using probabilistic re-estimation."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  upstream_tool: Kraken2
+  taxonomic_level: species
+
+gold:
+  tier_1_canonical:
+    tools: [Bracken]
+    expected_output_criteria:
+      has_abundance_table: true
+      n_species: ">= 1"
+  tier_2_alternative:
+    tools: [MetaPhlAn4]
+    functional_equivalence_criteria:
+      has_abundance_table: ">= 1.0"
+  tier_3_invalid:
+    tools: []

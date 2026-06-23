@@ -1,0 +1,21 @@
+query_id: meta_assembly_001
+family: meta_assembly
+nl_text: "I have quality-controlled paired-end metagenomics reads from a complex environmental sample. I need to assemble contigs for downstream gene prediction and binning."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  data_type: shotgun_metagenomics
+  complexity: high
+
+gold:
+  tier_1_canonical:
+    tools: [MEGAHIT]
+    expected_output_criteria:
+      has_contigs: true
+      n50: ">= 500"
+  tier_2_alternative:
+    tools: [metaSPAdes]
+    functional_equivalence_criteria:
+      has_contigs: ">= 1.0"
+  tier_3_invalid:
+    tools: [SPAdes, Flye]

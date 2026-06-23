@@ -1,0 +1,21 @@
+query_id: binning_001
+family: binning
+nl_text: "I have assembled metagenomics contigs and coverage information. I need to bin contigs into metagenome-assembled genomes (MAGs)."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  has_coverage: true
+  min_contig_length: 2500
+
+gold:
+  tier_1_canonical:
+    tools: [MetaBAT2]
+    expected_output_criteria:
+      n_bins: ">= 1"
+      has_bin_fasta: true
+  tier_2_alternative:
+    tools: [MaxBin2]
+    functional_equivalence_criteria:
+      n_bins: ">= 1"
+  tier_3_invalid:
+    tools: [SPAdes, Prodigal]

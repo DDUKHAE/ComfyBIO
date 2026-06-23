@@ -1,0 +1,21 @@
+query_id: functional_profiling_001
+family: functional_profiling
+nl_text: "I have quality-filtered metagenomics reads from human gut microbiome samples. I need to profile functional gene families and metabolic pathways."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  environment: gut_microbiome
+  database: UniRef90
+
+gold:
+  tier_1_canonical:
+    tools: [HUMAnN3]
+    expected_output_criteria:
+      n_pathways: ">= 10"
+      has_genefamilies: true
+  tier_2_alternative:
+    tools: [SUPER-FOCUS]
+    functional_equivalence_criteria:
+      n_pathways: ">= 5"
+  tier_3_invalid:
+    tools: [MetaPhlAn4, Kraken2]

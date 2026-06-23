@@ -1,0 +1,21 @@
+query_id: alpha_diversity_001
+family: alpha_diversity
+nl_text: "I have species abundance tables from 20 gut microbiome samples. I need to calculate within-sample diversity metrics including Shannon entropy and observed species richness."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  n_samples: 20
+  metric: shannon
+
+gold:
+  tier_1_canonical:
+    tools: [skbio_alpha]
+    expected_output_criteria:
+      has_diversity_values: true
+      n_metrics: ">= 1"
+  tier_2_alternative:
+    tools: [QIIME2_diversity]
+    functional_equivalence_criteria:
+      has_diversity_values: ">= 1.0"
+  tier_3_invalid:
+    tools: []

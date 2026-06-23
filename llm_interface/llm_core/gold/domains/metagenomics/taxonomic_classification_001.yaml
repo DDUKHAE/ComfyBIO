@@ -1,0 +1,21 @@
+query_id: taxonomic_classification_001
+family: taxonomic_classification
+nl_text: "I have quality-filtered metagenomic reads from soil samples. I want accurate species-level taxonomic profiling using marker genes."
+difficulty: medium
+tool_specificity: context_only
+context:
+  approach: marker_gene
+  environment: soil
+
+gold:
+  tier_1_canonical:
+    tools: [MetaPhlAn4]
+    expected_output_criteria:
+      n_species: ">= 1"
+      has_relative_abundance: true
+  tier_2_alternative:
+    tools: [mOTUs3]
+    functional_equivalence_criteria:
+      n_species: ">= 1"
+  tier_3_invalid:
+    tools: []

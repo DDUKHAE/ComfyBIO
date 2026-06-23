@@ -1,0 +1,21 @@
+query_id: amplicon_16s_001
+family: amplicon_16s
+nl_text: "I have 16S rRNA amplicon sequencing data (V3-V4 region) from environmental samples. I need to perform denoising, taxonomic classification, and diversity analysis."
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  data_type: 16S
+  region: V3_V4
+
+gold:
+  tier_1_canonical:
+    tools: [QIIME2]
+    expected_output_criteria:
+      has_feature_table: true
+      n_asvs: ">= 10"
+  tier_2_alternative:
+    tools: [DADA2]
+    functional_equivalence_criteria:
+      has_feature_table: ">= 1.0"
+  tier_3_invalid:
+    tools: [OTU_clustering, MetaPhlAn4]

@@ -1,0 +1,20 @@
+query_id: bin_quality_001
+family: bin_quality
+nl_text: "I have metagenome-assembled genome (MAG) bins. I need to assess their completeness and contamination to identify high-quality MAGs for downstream analysis."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  input_type: mag_bins
+
+gold:
+  tier_1_canonical:
+    tools: [CheckM2]
+    expected_output_criteria:
+      has_completeness: true
+      has_contamination: true
+  tier_2_alternative:
+    tools: [CheckM]
+    functional_equivalence_criteria:
+      has_completeness: ">= 1.0"
+  tier_3_invalid:
+    tools: [BUSCO, QUAST]

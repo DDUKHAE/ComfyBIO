@@ -1,0 +1,21 @@
+query_id: meta_qc_001
+family: meta_qc
+nl_text: "I have raw shotgun metagenomics paired-end FASTQ files from human gut samples. I need to trim low-quality reads and remove human host contamination before analysis."
+difficulty: easy
+tool_specificity: goal_specified
+context:
+  data_type: shotgun_metagenomics
+  host: human
+
+gold:
+  tier_1_canonical:
+    tools: [fastp]
+    expected_output_criteria:
+      pass_rate: ">= 0.7"
+      has_clean_reads: true
+  tier_2_alternative:
+    tools: [KneadData, trimmomatic]
+    functional_equivalence_criteria:
+      pass_rate: ">= 0.6"
+  tier_3_invalid:
+    tools: []

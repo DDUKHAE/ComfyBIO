@@ -1,0 +1,21 @@
+query_id: beta_diversity_001
+family: beta_diversity
+nl_text: "I have species abundance profiles from gut microbiome samples across two patient groups. I want to compare community composition between groups using Bray-Curtis dissimilarity and PCoA."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  metric: bray_curtis
+  n_groups: 2
+
+gold:
+  tier_1_canonical:
+    tools: [skbio_beta]
+    expected_output_criteria:
+      has_distance_matrix: true
+      has_pcoa_coordinates: true
+  tier_2_alternative:
+    tools: [QIIME2_beta]
+    functional_equivalence_criteria:
+      has_distance_matrix: ">= 1.0"
+  tier_3_invalid:
+    tools: []

@@ -1,0 +1,21 @@
+query_id: gene_prediction_001
+family: gene_prediction
+nl_text: "I have assembled metagenomic contigs. I need to predict open reading frames and protein-coding genes for functional annotation."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  input_type: metagenomic_contigs
+  kingdom: prokaryote
+
+gold:
+  tier_1_canonical:
+    tools: [Prodigal]
+    expected_output_criteria:
+      n_genes: ">= 100"
+      has_protein_faa: true
+  tier_2_alternative:
+    tools: [FragGeneScan]
+    functional_equivalence_criteria:
+      n_genes: ">= 50"
+  tier_3_invalid:
+    tools: [Augustus, MAKER]

@@ -20,11 +20,16 @@ The harness handles this gracefully by skipping output-criterion checks.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from pathlib import Path
+
+import yaml
 
 from llm_core.gold.schema import TieredGold
 from llm_core.tsr.schema import DomainTSR
 
-from .query_schema import HeldOutQuery
+from .query_schema import Difficulty, HeldOutQuery, ToolSpecificity
+
+_GOLD_ROOT = Path(__file__).resolve().parent.parent / "gold" / "domains"
 
 
 class DomainPlugin(ABC):
@@ -58,6 +63,37 @@ class DomainPlugin(ABC):
         Raises FileNotFoundError if gold YAML for query_id does not exist.
         """
         ...
+
+    def gold_dir(self) -> Path:
+        """Return the directory containing this domain's gold YAML files."""
+        return _GOLD_ROOT / self.domain_id
+
+    def load_query(self, query_id: str) -> HeldOutQuery:
+        """Load a HeldOutQuery from the combined gold+query YAML file."""
+        path = self.gold_dir() / f"{query_id}.yaml"
+        if not path.exists():
+            raise FileNotFoundError(f"No query file for '{query_id}': {path}")
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+        return HeldOutQuery(
+            query_id=data["query_id"],
+            domain_id=self.domain_id,
+            family=data["family"],
+            nl_text=data.get("nl_text", ""),
+            difficulty=Difficulty(data.get("difficulty", "medium")),
+            tool_specificity=ToolSpecificity(
+                data.get("tool_specificity", "goal_specified")
+            ),
+            context=data.get("context", {}),
+            fixture_path=data.get("fixture_path", ""),
+            adversarial_hint_tool=data.get("adversarial_hint_tool"),
+        )
+
+    def list_query_ids(self) -> list[str]:
+        """Return all query IDs available in the gold directory."""
+        d = self.gold_dir()
+        if not d.exists():
+            return []
+        return sorted(p.stem for p in d.glob("*.yaml"))
 
     def run_workflow(self, query: HeldOutQuery) -> dict:
         """Execute the workflow for a query and return tools + output metrics.

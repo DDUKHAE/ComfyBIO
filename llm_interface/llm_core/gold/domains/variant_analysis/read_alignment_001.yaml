@@ -1,11 +1,10 @@
 query_id: read_alignment_001
 family: read_alignment
-nl_text: "I have Illumina WGS paired-end FASTQ files from a cancer patient. I need to align them to the human reference genome hg38 to prepare for variant calling."
+nl_text: "I have Illumina whole genome sequencing (WGS) paired-end FASTQ files from a cancer patient. I need to align them to the human reference genome hg38 to prepare for variant calling."
 difficulty: easy
 tool_specificity: goal_specified
 context:
   sequencer: illumina
-  analysis_type: wgs
 
 gold:
   tier_1_canonical:

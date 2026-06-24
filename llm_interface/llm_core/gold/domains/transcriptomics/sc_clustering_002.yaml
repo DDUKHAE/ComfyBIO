@@ -1,0 +1,28 @@
+query_id: sc_clustering_002
+family: sc_clustering
+nl_text: "I have single-cell RNA-seq data and want to cluster my cells. A paper I read used k-means clustering for scRNA-seq. Is that appropriate?"
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  assay: scrna_seq
+
+gold:
+  tier_1_canonical:
+    tools: [leiden]
+    expected_output_criteria:
+      has_cluster_column: true
+      n_clusters_min: 1
+
+  tier_2_alternative:
+    tools: [louvain]
+    functional_equivalence_criteria:
+      has_cluster_column: ">= 1.0"
+
+  tier_3_invalid:
+    tools: [kmeans, DESeq2]
+
+  adversarial_override:
+    bad_hint_tool: kmeans
+    correct_behaviors:
+      - "Recognize k-means is not appropriate for high-dimensional sparse scRNA-seq data"
+      - "Select graph-based community detection (leiden or louvain)"

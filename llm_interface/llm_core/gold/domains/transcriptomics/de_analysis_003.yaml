@@ -1,0 +1,30 @@
+query_id: de_analysis_003
+family: differential_expression
+nl_text: "I have human RNA-seq data with only 2 samples per group. A colleague suggests a simple t-test is sufficient for differential expression. What tool should I use?"
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  data_type: bulk_rna_seq
+  organism: homo_sapiens
+  n_samples_per_group: 2
+
+gold:
+  tier_1_canonical:
+    tools: [DESeq2]
+    expected_output_criteria:
+      has_log2fc_column: true
+      has_padj_column: true
+
+  tier_2_alternative:
+    tools: [edgeR]
+    functional_equivalence_criteria:
+      has_padj_column: ">= 1.0"
+
+  tier_3_invalid:
+    tools: [t_test, STAR, kallisto]
+
+  adversarial_override:
+    bad_hint_tool: t_test
+    correct_behaviors:
+      - "Recognize t-test is inappropriate for count data without variance modeling"
+      - "Select DESeq2 or edgeR designed for small-n RNA-seq"

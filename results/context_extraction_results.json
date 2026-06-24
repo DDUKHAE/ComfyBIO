@@ -1,0 +1,600 @@
+[
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "copy_number_001",
+    "nl_text": "I have tumor whole-exome sequencing BAM files with a matched normal sample. I need to detect somatic copy number alterations and produce segmentation files.",
+    "gold_context": {
+      "assay": "wes",
+      "has_matched_normal": true
+    },
+    "extracted_context": {
+      "sequencer": "illumina",
+      "analysis_type": "somatic",
+      "assay": "wes",
+      "variant_type": "CNV",
+      "data_format": "bam",
+      "has_matched_normal": true
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.3333333333333333,
+    "field_scores": {
+      "assay": true,
+      "has_matched_normal": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "gwas_association_001",
+    "nl_text": "I have QC-passed genotype data from 2000 cases and 2000 controls. I need to run a genome-wide association study to identify variants associated with type 2 diabetes.",
+    "gold_context": {
+      "phenotype_type": "binary",
+      "n_cases": 2000,
+      "n_controls": 2000
+    },
+    "extracted_context": {
+      "analysis_type": "germline",
+      "phenotype_type": "binary",
+      "variant_type": "SNP",
+      "organism": "homo_sapiens",
+      "n_samples": 4000,
+      "n_cases": 2000,
+      "n_controls": 2000
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.42857142857142855,
+    "field_scores": {
+      "phenotype_type": true,
+      "n_cases": true,
+      "n_controls": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "gwas_association_002",
+    "nl_text": "I have genotype data and BMI measurements for 3000 individuals from a population cohort. I need to run a GWAS to find genetic loci associated with body mass index.",
+    "gold_context": {
+      "phenotype_type": "continuous",
+      "n_samples": 3000
+    },
+    "extracted_context": {
+      "analysis_type": "germline",
+      "phenotype_type": "continuous",
+      "organism": "homo_sapiens",
+      "n_samples": 3000
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.5,
+    "field_scores": {
+      "phenotype_type": true,
+      "n_samples": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "gwas_qc_001",
+    "nl_text": "I have PLINK binary format genotype data from 5000 individuals. I need to perform standard quality control: filter for MAF > 1%, call rate > 95%, and HWE p > 1e-6.",
+    "gold_context": {
+      "n_samples": 5000,
+      "data_format": "plink_binary"
+    },
+    "extracted_context": {
+      "analysis_type": "germline",
+      "variant_type": "SNP",
+      "organism": "homo_sapiens",
+      "data_format": "plink_binary",
+      "n_samples": 5000
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.4,
+    "field_scores": {
+      "n_samples": true,
+      "data_format": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "phasing_001",
+    "nl_text": "I have a VCF with heterozygous variants from a sequenced individual and want to determine which variants are on the same chromosome (haplotype phasing) to understand compound heterozygosity.",
+    "gold_context": {
+      "analysis_type": "phasing"
+    },
+    "extracted_context": {
+      "analysis_type": "phasing",
+      "organism": "homo_sapiens",
+      "data_format": "vcf",
+      "n_samples": 1
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.25,
+    "field_scores": {
+      "analysis_type": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "read_alignment_001",
+    "nl_text": "I have Illumina whole genome sequencing (WGS) paired-end FASTQ files from a cancer patient. I need to align them to the human reference genome hg38 to prepare for variant calling.",
+    "gold_context": {
+      "sequencer": "illumina",
+      "analysis_type": "wgs"
+    },
+    "extracted_context": {
+      "sequencer": "illumina",
+      "analysis_type": "somatic",
+      "assay": "wgs",
+      "genome_build": "hg38",
+      "organism": "homo_sapiens",
+      "n_samples": 1
+    },
+    "parse_error": null,
+    "exact_match": false,
+    "recall": 0.5,
+    "precision": 0.16666666666666666,
+    "field_scores": {
+      "sequencer": true,
+      "analysis_type": false
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "read_alignment_002",
+    "nl_text": "I have Oxford Nanopore long reads from a bacterial whole genome sequencing (WGS) experiment. I need to align them to a reference genome for downstream variant analysis.",
+    "gold_context": {
+      "sequencer": "nanopore",
+      "analysis_type": "wgs"
+    },
+    "extracted_context": {
+      "sequencer": "nanopore",
+      "analysis_type": "wgs",
+      "assay": "wgs",
+      "organism": "other"
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.5,
+    "field_scores": {
+      "sequencer": true,
+      "analysis_type": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "structural_variant_001",
+    "nl_text": "I have WGS BAM files from a patient with suspected chromosomal rearrangements. I want to detect large structural variants including deletions, duplications, inversions, and translocations.",
+    "gold_context": {
+      "variant_type": "structural"
+    },
+    "extracted_context": {
+      "analysis_type": "wgs",
+      "assay": "wgs",
+      "variant_type": "structural",
+      "organism": "homo_sapiens",
+      "data_format": "bam",
+      "n_samples": 1
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.16666666666666666,
+    "field_scores": {
+      "variant_type": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "variant_annotation_001",
+    "nl_text": "I have a filtered VCF file with germline variants. I need to annotate them with functional consequences, population allele frequencies from gnomAD, and ClinVar clinical significance.",
+    "gold_context": {
+      "organism": "homo_sapiens",
+      "genome_build": "GRCh38"
+    },
+    "extracted_context": {
+      "analysis_type": "germline",
+      "organism": "homo_sapiens",
+      "data_format": "vcf"
+    },
+    "parse_error": null,
+    "exact_match": false,
+    "recall": 0.5,
+    "precision": 0.3333333333333333,
+    "field_scores": {
+      "organism": true,
+      "genome_build": false
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "variant_calling_001",
+    "nl_text": "I have duplicate-marked BAM files from a healthy individual. I need to call germline SNPs and indels following GATK best practices.",
+    "gold_context": {
+      "analysis_type": "germline",
+      "n_samples": 1
+    },
+    "extracted_context": {
+      "sequencer": "illumina",
+      "analysis_type": "germline",
+      "variant_type": "SNP",
+      "organism": "homo_sapiens",
+      "data_format": "bam",
+      "has_matched_normal": false,
+      "n_samples": 1
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.2857142857142857,
+    "field_scores": {
+      "analysis_type": true,
+      "n_samples": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "variant_calling_002",
+    "nl_text": "I have tumor and matched normal BAM files from a breast cancer patient. I need to call somatic mutations to identify cancer-specific variants.",
+    "gold_context": {
+      "analysis_type": "somatic",
+      "has_matched_normal": true
+    },
+    "extracted_context": {
+      "analysis_type": "somatic",
+      "organism": "homo_sapiens",
+      "data_format": "bam",
+      "has_matched_normal": true,
+      "n_samples": 2,
+      "n_cases": 1,
+      "n_controls": 1
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.2857142857142857,
+    "field_scores": {
+      "analysis_type": true,
+      "has_matched_normal": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "variant_filtering_001",
+    "nl_text": "I have a VCF with SNP variants called from 150 samples in a population cohort. I need to apply variant quality score recalibration to remove false positives.",
+    "gold_context": {
+      "n_samples": 150,
+      "variant_type": "SNP"
+    },
+    "extracted_context": {
+      "analysis_type": "germline",
+      "variant_type": "SNP",
+      "organism": "homo_sapiens",
+      "data_format": "vcf",
+      "n_samples": 150
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.4,
+    "field_scores": {
+      "n_samples": true,
+      "variant_type": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "variant_analysis",
+    "query_id": "variant_filtering_002",
+    "nl_text": "I have a VCF from a trio study with only 3 samples (parents and child). I need to filter variants by quality score and read depth.",
+    "gold_context": {
+      "n_samples": 3
+    },
+    "extracted_context": {
+      "analysis_type": "germline",
+      "data_format": "vcf",
+      "n_samples": 3
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.3333333333333333,
+    "field_scores": {
+      "n_samples": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "adapter_trimming_001",
+    "nl_text": "My paired-end RNA-seq reads have Illumina TruSeq adapters. I need to trim the adapters and remove reads shorter than 50 bp before alignment.",
+    "gold_context": {
+      "data_type": "short_read",
+      "paired_end": true
+    },
+    "extracted_context": {
+      "data_type": "short_read",
+      "assay": "bulk_rna_seq",
+      "approach": "alignment_based",
+      "paired_end": true
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.5,
+    "field_scores": {
+      "data_type": true,
+      "paired_end": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "de_analysis_001",
+    "nl_text": "I have human RNA-seq count data with 4 samples per group (treated vs control). I need to identify differentially expressed genes with adjusted p-value < 0.05.",
+    "gold_context": {
+      "n_samples_per_group": 4,
+      "data_type": "bulk_rna_seq",
+      "organism": "homo_sapiens"
+    },
+    "extracted_context": {
+      "data_type": "bulk_rna_seq",
+      "assay": "bulk_rna_seq",
+      "organism": "homo_sapiens",
+      "input_type": "count_matrix",
+      "n_samples_per_group": 4
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.6,
+    "field_scores": {
+      "n_samples_per_group": true,
+      "data_type": true,
+      "organism": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "genome_alignment_001",
+    "nl_text": "I have trimmed Illumina short-read RNA-seq FASTQs. I need to align them to the human reference genome (hg38) and obtain sorted BAM files.",
+    "gold_context": {
+      "data_type": "short_read",
+      "organism": "homo_sapiens"
+    },
+    "extracted_context": {
+      "data_type": "short_read",
+      "approach": "alignment_based",
+      "organism": "homo_sapiens",
+      "input_type": "sorted_bam"
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.5,
+    "field_scores": {
+      "data_type": true,
+      "organism": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "pathway_enrichment_001",
+    "nl_text": "I have a list of significantly differentially expressed human genes. I want to find enriched biological pathways and GO terms.",
+    "gold_context": {
+      "input_type": "gene_list",
+      "organism": "homo_sapiens"
+    },
+    "extracted_context": {
+      "organism": "homo_sapiens",
+      "input_type": "gene_list"
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 1.0,
+    "field_scores": {
+      "input_type": true,
+      "organism": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "pseudo_alignment_001",
+    "nl_text": "I want fast transcript-level quantification of RNA-seq reads without full genome alignment. I have a reference transcriptome FASTA.",
+    "gold_context": {
+      "approach": "pseudo_alignment"
+    },
+    "extracted_context": {
+      "data_type": "bulk_rna_seq",
+      "assay": "bulk_rna_seq",
+      "approach": "pseudo_alignment"
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.3333333333333333,
+    "field_scores": {
+      "approach": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "raw_qc_001",
+    "nl_text": "I received FASTQ files from an Illumina sequencer. Before any analysis, I want to check the quality of the raw reads and generate a QC report.",
+    "gold_context": {
+      "data_type": "short_read"
+    },
+    "extracted_context": {
+      "data_type": "short_read"
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 1.0,
+    "field_scores": {
+      "data_type": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "read_quantification_001",
+    "nl_text": "I have aligned BAM files from STAR and a GTF annotation file. I need to count reads per gene to create a count matrix for downstream DE analysis.",
+    "gold_context": {
+      "input_type": "sorted_bam",
+      "annotation": "gtf"
+    },
+    "extracted_context": {
+      "data_type": "bulk_rna_seq",
+      "assay": "bulk_rna_seq",
+      "approach": "alignment_based",
+      "input_type": "sorted_bam",
+      "annotation": "gtf"
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.4,
+    "field_scores": {
+      "input_type": true,
+      "annotation": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "sc_annotation_001",
+    "nl_text": "I have clustered single-cell RNA-seq data. I want to automatically annotate the cell types of each cluster using a reference database.",
+    "gold_context": {
+      "assay": "scrna_seq",
+      "has_clusters": true
+    },
+    "extracted_context": {
+      "assay": "scrna_seq",
+      "has_clusters": true
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 1.0,
+    "field_scores": {
+      "assay": true,
+      "has_clusters": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "sc_clustering_001",
+    "nl_text": "I have preprocessed scRNA-seq data with PCA done. I want to cluster the cells into biologically meaningful groups.",
+    "gold_context": {
+      "assay": "scrna_seq"
+    },
+    "extracted_context": {
+      "assay": "scrna_seq",
+      "input_type": "count_matrix",
+      "has_clusters": false
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.3333333333333333,
+    "field_scores": {
+      "assay": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "sc_preprocessing_001",
+    "nl_text": "I have 10x Genomics single-cell RNA-seq data in h5ad format. I need to filter low-quality cells, normalize, and find highly variable genes before clustering.",
+    "gold_context": {
+      "assay": "scrna_seq",
+      "input_format": "h5ad"
+    },
+    "extracted_context": {
+      "data_type": "short_read",
+      "assay": "scrna_seq",
+      "input_type": "count_matrix",
+      "input_format": "h5ad",
+      "has_clusters": false
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.4,
+    "field_scores": {
+      "assay": true,
+      "input_format": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "sc_trajectory_001",
+    "nl_text": "I have preprocessed and clustered scRNA-seq data of differentiating cells with both spliced and unspliced count matrices. I want to infer developmental trajectories and RNA velocity.",
+    "gold_context": {
+      "assay": "scrna_seq",
+      "has_spliced_unspliced": true
+    },
+    "extracted_context": {
+      "assay": "scrna_seq",
+      "input_type": "count_matrix",
+      "has_clusters": true,
+      "has_spliced_unspliced": true
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.5,
+    "field_scores": {
+      "assay": true,
+      "has_spliced_unspliced": true
+    }
+  },
+  {
+    "provider": "claude",
+    "domain": "transcriptomics",
+    "query_id": "visualization_001",
+    "nl_text": "I need to create a publication-quality heatmap showing expression levels of top 50 differentially expressed genes across sample groups.",
+    "gold_context": {
+      "plot_type": "heatmap"
+    },
+    "extracted_context": {
+      "assay": "bulk_rna_seq",
+      "input_type": "gene_list",
+      "plot_type": "heatmap"
+    },
+    "parse_error": null,
+    "exact_match": true,
+    "recall": 1.0,
+    "precision": 0.3333333333333333,
+    "field_scores": {
+      "plot_type": true
+    }
+  }
+]

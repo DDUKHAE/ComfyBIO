@@ -1,6 +1,6 @@
 query_id: read_alignment_002
 family: read_alignment
-nl_text: "I have Oxford Nanopore long reads from a bacterial genome. I need to align them to a reference genome for downstream variant analysis."
+nl_text: "I have Oxford Nanopore long reads from a bacterial whole genome sequencing (WGS) experiment. I need to align them to a reference genome for downstream variant analysis."
 difficulty: medium
 tool_specificity: context_only
 context:

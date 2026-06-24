@@ -1,6 +1,6 @@
 query_id: sc_trajectory_001
 family: sc_trajectory
-nl_text: "I have preprocessed and clustered scRNA-seq data of differentiating cells. I want to infer developmental trajectories and RNA velocity."
+nl_text: "I have preprocessed and clustered scRNA-seq data of differentiating cells with both spliced and unspliced count matrices. I want to infer developmental trajectories and RNA velocity."
 difficulty: hard
 tool_specificity: goal_specified
 context:

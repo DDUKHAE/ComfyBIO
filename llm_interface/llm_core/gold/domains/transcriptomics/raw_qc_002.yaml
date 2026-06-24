@@ -1,0 +1,22 @@
+query_id: raw_qc_002
+family: raw_qc
+nl_text: "I received Oxford Nanopore long reads from a direct RNA sequencing experiment. I need to check the quality and length distribution of the reads before downstream analysis."
+difficulty: medium
+tool_specificity: goal_specified
+context:
+  data_type: long_read
+
+gold:
+  tier_1_canonical:
+    tools: [NanoPlot]
+    expected_output_criteria:
+      has_html_report: true
+      has_length_histogram: true
+
+  tier_2_alternative:
+    tools: [NanoStat]
+    functional_equivalence_criteria:
+      has_html_report: ">= 1.0"
+
+  tier_3_invalid:
+    tools: [FastQC, MultiQC]

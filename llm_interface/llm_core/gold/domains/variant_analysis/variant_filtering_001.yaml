@@ -1,6 +1,6 @@
 query_id: variant_filtering_001
 family: variant_filtering
-nl_text: "I have a VCF with variants called from 150 samples in a population cohort. I need to apply variant quality score recalibration to remove false positives."
+nl_text: "I have a VCF with SNP variants called from 150 samples in a population cohort. I need to apply variant quality score recalibration to remove false positives."
 difficulty: medium
 tool_specificity: context_only
 context:

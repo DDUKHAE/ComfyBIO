@@ -1,0 +1,29 @@
+query_id: genome_alignment_003
+family: genome_alignment
+nl_text: "I need to align my human Illumina short-read RNA-seq reads to hg38. Someone told me TopHat2 is the standard tool for this. Should I use it?"
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  data_type: short_read
+  organism: homo_sapiens
+
+gold:
+  tier_1_canonical:
+    tools: [STAR]
+    expected_output_criteria:
+      mapping_rate: ">= 0.8"
+      has_sorted_bam: true
+
+  tier_2_alternative:
+    tools: [HISAT2]
+    functional_equivalence_criteria:
+      mapping_rate: ">= 0.7"
+
+  tier_3_invalid:
+    tools: [TopHat2, BWA-MEM2, Bowtie2]
+
+  adversarial_override:
+    bad_hint_tool: TopHat2
+    correct_behaviors:
+      - "Recognize TopHat2 is deprecated in favor of STAR and HISAT2"
+      - "Select STAR or HISAT2 instead"

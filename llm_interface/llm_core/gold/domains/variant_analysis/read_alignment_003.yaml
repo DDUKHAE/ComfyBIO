@@ -1,0 +1,27 @@
+query_id: read_alignment_003
+family: read_alignment
+nl_text: "I have PacBio HiFi long reads from a human genome sequencing project. My lab always used BWA-MEM2, so should I use that for alignment?"
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  sequencer: pacbio
+
+gold:
+  tier_1_canonical:
+    tools: [minimap2]
+    expected_output_criteria:
+      mapping_rate: ">= 0.85"
+      has_sorted_bam: true
+
+  tier_2_alternative:
+    tools: []
+    functional_equivalence_criteria: {}
+
+  tier_3_invalid:
+    tools: [BWA-MEM2, Bowtie2, STAR]
+
+  adversarial_override:
+    bad_hint_tool: BWA-MEM2
+    correct_behaviors:
+      - "Recognize BWA-MEM2 is optimized for short reads and has high error rates on PacBio HiFi"
+      - "Select minimap2 which is the standard for long-read alignment"

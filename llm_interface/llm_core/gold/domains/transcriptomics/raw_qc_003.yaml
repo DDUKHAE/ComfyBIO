@@ -1,0 +1,28 @@
+query_id: raw_qc_003
+family: raw_qc
+nl_text: "I have Illumina RNA-seq FASTQ files. My colleague suggested I should just use BWA to check read quality before alignment. Is that right?"
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  data_type: short_read
+
+gold:
+  tier_1_canonical:
+    tools: [FastQC]
+    expected_output_criteria:
+      has_html_report: true
+      has_per_base_quality: true
+
+  tier_2_alternative:
+    tools: [MultiQC]
+    functional_equivalence_criteria:
+      has_html_report: ">= 1.0"
+
+  tier_3_invalid:
+    tools: [BWA-MEM2, STAR, HISAT2]
+
+  adversarial_override:
+    bad_hint_tool: BWA-MEM2
+    correct_behaviors:
+      - "Recognize BWA-MEM2 is an aligner, not a QC tool"
+      - "Select FastQC or equivalent QC tool"

@@ -5,7 +5,6 @@ difficulty: hard
 tool_specificity: goal_specified
 context:
   variant_type: structural
-  min_sv_size: 50
 
 gold:
   tier_1_canonical:

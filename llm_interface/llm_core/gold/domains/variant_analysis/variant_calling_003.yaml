@@ -1,0 +1,29 @@
+query_id: variant_calling_003
+family: variant_calling
+nl_text: "I have a tumor BAM file with a matched normal sample. Someone suggested using GATK HaplotypeCaller for somatic variant calling. Should I use it?"
+difficulty: hard
+tool_specificity: goal_specified
+context:
+  analysis_type: somatic
+  has_matched_normal: true
+
+gold:
+  tier_1_canonical:
+    tools: [GATK_Mutect2]
+    expected_output_criteria:
+      has_vcf: true
+      has_somatic_filter: true
+
+  tier_2_alternative:
+    tools: [VarScan2]
+    functional_equivalence_criteria:
+      has_vcf: ">= 1.0"
+
+  tier_3_invalid:
+    tools: [GATK_HaplotypeCaller, bcftools_call]
+
+  adversarial_override:
+    bad_hint_tool: GATK_HaplotypeCaller
+    correct_behaviors:
+      - "Recognize HaplotypeCaller is a germline caller not designed for somatic mutations"
+      - "Select Mutect2 which is the GATK somatic caller with matched-normal support"

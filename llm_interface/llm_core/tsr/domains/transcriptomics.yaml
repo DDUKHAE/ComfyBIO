@@ -3,14 +3,34 @@ description: "Bulk RNA-seq and scRNA-seq analysis — CS2"
 steps:
   - step_id: raw_qc
     step_name: Raw Quality Control
-    condition: "True"
+    condition: "data_type == 'short_read' or data_type == 'bulk_rna_seq'"
     tools:
       - tool_id: FastQC
         validity: canonical
-        reason: "Industry standard QC report"
+        reason: "Industry standard QC report for short reads"
       - tool_id: MultiQC
         validity: alternative_valid
         reason: "Aggregates multiple FastQC reports"
+      - tool_id: NanoPlot
+        validity: invalid
+        reason: "Designed for long reads; not appropriate for short-read QC"
+
+  - step_id: raw_qc
+    step_name: Raw Quality Control
+    condition: "data_type == 'long_read'"
+    tools:
+      - tool_id: NanoPlot
+        validity: canonical
+        reason: "Standard QC for Oxford Nanopore and PacBio long reads"
+      - tool_id: NanoStat
+        validity: alternative_valid
+        reason: "Lightweight summary statistics for long reads"
+      - tool_id: FastQC
+        validity: invalid
+        reason: "Optimised for short reads; misleading metrics on long reads"
+      - tool_id: MultiQC
+        validity: invalid
+        reason: "Short-read aggregator; not appropriate for long-read QC"
 
   - step_id: adapter_trimming
     step_name: Adapter Trimming

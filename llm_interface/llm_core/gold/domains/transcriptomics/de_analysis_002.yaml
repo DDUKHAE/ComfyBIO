@@ -1,27 +1,25 @@
-query_id: de_analysis_001
+query_id: de_analysis_002
 family: differential_expression
-nl_text: "I have human RNA-seq count data with 4 samples per group (treated vs control). I need to identify differentially expressed genes with adjusted p-value < 0.05."
+nl_text: "I have human bulk RNA-seq count data from a time-course experiment with 3 time points and 2 replicates each. I need to find genes with significant expression changes over time."
 difficulty: medium
 tool_specificity: goal_specified
 context:
-  n_samples_per_group: 4
   data_type: bulk_rna_seq
   organism: homo_sapiens
+  n_samples_per_group: 2
 
 gold:
   tier_1_canonical:
-    tools: [edgeR]
+    tools: [DESeq2]
     expected_output_criteria:
-      top10_overlap_min: 1.0
       has_log2fc_column: true
       has_padj_column: true
 
   tier_2_alternative:
-    tools: [DESeq2, limma_voom]
+    tools: [edgeR, limma_voom]
     functional_equivalence_criteria:
-      top10_overlap_with_canonical: ">= 0.80"
       has_log2fc_column: ">= 1.0"
       has_padj_column: ">= 1.0"
 
   tier_3_invalid:
-    tools: [kallisto, STAR, fastp, scanpy]
+    tools: [kallisto, STAR, scanpy, t_test]

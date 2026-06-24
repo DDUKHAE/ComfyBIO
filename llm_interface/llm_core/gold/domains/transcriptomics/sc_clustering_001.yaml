@@ -5,7 +5,6 @@ difficulty: medium
 tool_specificity: goal_specified
 context:
   assay: scrna_seq
-  n_cells: 100
 
 gold:
   tier_1_canonical:
